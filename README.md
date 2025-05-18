@@ -2,7 +2,7 @@
 
 ## Analysis scripts accompanying Stammnitz and Lehner, 2025
 
-_Maximilian Stammnitz, Lehner Laboratory (Genetic Systems), Centre for Genomic Regulation (2022-2025)_
+_Lehner Laboratory (Genetic Systems), Centre for Genomic Regulation (2022-2025)_
 
 This repository contains custom R scripts which - in conjunction with the associated supplementary files - can be used to replicate the main figures presented in: **The genetic architecture of the allosteric plant hormone receptor PYL1 (bioRxiv, 2025)**.
 
