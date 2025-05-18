@@ -1,4 +1,4 @@
-![Scripting](https://img.shields.io/badge/Language-R-yellow.svg) ![Copyright](https://img.shields.io/badge/Copyright-(c)_2025_Max\_Stammnitz\_@CRG\_Cambridge-green.svg)
+![Scripting](https://img.shields.io/badge/Language-R-yellow.svg) ![Copyright](https://img.shields.io/badge/Copyright-(c)_2025_Max\_Stammnitz\_@CRG\_Barcelona-green.svg)
 
 ## Analysis scripts accompanying Stammnitz and Lehner, 2025
 
