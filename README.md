@@ -4,7 +4,7 @@
 
 _Lehner Laboratory (Genetic Systems), Centre for Genomic Regulation (2022-2025)_
 
-This repository contains custom R scripts which - in conjunction with the associated supplementary files - can be used to replicate the main and extended data figures presented in: **The genetic architecture of the allosteric plant hormone receptor PYL1 (bioRxiv, 2025)**.
+This repository contains custom R scripts which - in conjunction with the associated supplementary files - can be used to replicate the main and extended data figures presented in: **The genetic architecture of an allosteric hormone receptor (bioRxiv, 2025)**.
 
 The scripts are written to run on **[R](https://www.r-project.org/)** version 4.1.3 or later. You should be able to check your current version of R by running the command below:
 
