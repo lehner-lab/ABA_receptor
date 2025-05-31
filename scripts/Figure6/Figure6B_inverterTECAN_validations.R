@@ -37,7 +37,7 @@ parameters.Hill <- parameters.Hill[!is.na(parameters.Hill[,1]),]
 ##########################
 
 ## raw data import
-PYL1.ABI1.TECAN <- as.matrix(read_xlsx('../../data/TECAN/PYL1_validations/PYL1-ABI1/pMS-GluePCA1_PYL1_mutant_validations_dose_response_TECAN.xlsx', sheet = 1))[20:405,1:263]
+PYL1.ABI1.TECAN <- as.matrix(read_xlsx('../../data/TECAN/PYL1_validations/pMS-GluePCA1_PYL1_mutant_validations_dose_response_TECAN.xlsx', sheet = 1))[20:405,1:263]
 rownames(PYL1.ABI1.TECAN) <- PYL1.ABI1.TECAN[,1]
 colnames(PYL1.ABI1.TECAN) <- PYL1.ABI1.TECAN[1,]
 PYL1.ABI1.TECAN <- PYL1.ABI1.TECAN[,-1]
@@ -47,7 +47,7 @@ class(PYL1.ABI1.TECAN) <- "numeric"
 PYL1.ABI1.TECAN <- as.data.frame(PYL1.ABI1.TECAN)
 
 ## assign mutants
-setup <- as.matrix(read_xlsx('../../data/TECAN/PYL1_validations/PYL1-ABI1/pMS-GluePCA1_PYL1_mutant_validations_dose_response_TECAN.xlsx', sheet = 1))[1:16,1:25]
+setup <- as.matrix(read_xlsx('../../data/TECAN/PYL1_validations/pMS-GluePCA1_PYL1_mutant_validations_dose_response_TECAN.xlsx', sheet = 1))[1:16,1:25]
 colnames(setup) <- 0:24
 rownames(setup) <- setup[,1]
 setup <- setup[,-1]
