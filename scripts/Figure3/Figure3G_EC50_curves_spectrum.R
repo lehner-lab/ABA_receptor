@@ -265,11 +265,11 @@ for(i in 1:2){
 }
 
 #### plot selected
-pdf("../../results/Figure3/Figure3G_Q42.pdf", height = 13, width = 12)
+pdf("../../results/Figure3/Figure3G_Q42_curves.pdf", height = 13, width = 12)
 print(plots.out["Q42"])
 dev.off()
 
-pdf("../../results/Figure3/Figure3G_F47.pdf", height = 13, width = 12)
+pdf("../../results/Figure3/Figure3G_F47_curves.pdf", height = 13, width = 12)
 print(plots.out["F47"])
 dev.off()
 
