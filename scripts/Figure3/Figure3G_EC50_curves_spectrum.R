@@ -183,8 +183,6 @@ rm(i, four_pl_function, tmp.df, tmp.model, tmp.model.predict, tmp.predict.newdat
 ## 3. Plot ##
 #############
 
-## PYL1 residues = columns
-
 #### WT residues
 WT.seq <- c(str_split_fixed("TQDEFTQLSQSIAEFHTYQLGNGRCSSLLAQRIHAPPETVWSVVRRFDRPQIYKHFIKSCNVSEDFEMRVGCTRDVNVISGLPANTSRERLDLLDDDRRVTGFSITGGEHRLRNYKSVTTVHRFEKEEEEERIWTVVLESYVVDVPEGNSEEDTRLFADTVIRLNLQKLASITEAMN", "", 177))
 
