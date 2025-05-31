@@ -8,7 +8,7 @@ This repository contains custom R scripts which - in conjunction with the associ
 
 **[The genetic architecture of an allosteric hormone receptor (bioRxiv, 2025)](https://www.biorxiv.org/content/10.1101/2025.05.30.656975v1)**
 
-The scripts are written to run on **[R](https://www.r-project.org/)** version 4.1.3 or later. You should be able to check your current version of R by running the command below:
+The scripts are written to run on **[R](https://www.r-project.org/)** version 4.4.1 or later. You should be able to check your current version of R by running the command below:
 
 ```
 R --version
