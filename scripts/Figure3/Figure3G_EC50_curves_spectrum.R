@@ -198,7 +198,7 @@ mut.order <- c("G", "A", "V", "L", "M",
 #### summarise dosages
 dosages[12] <- 9.062741e-03/3.5/3.5/3.5
 
-#### mutant colours like in Taraneh's paper
+#### mutant colours
 cols <- c("G" = wes_palette("Darjeeling2", 6, type = "continuous")[6], "P" = wes_palette("Darjeeling2", 6, type = "continuous")[6], "*" = wes_palette("Darjeeling2", 6, type = "continuous")[6], 
           "W" = wes_palette("Darjeeling2", 6, type = "continuous")[5], "Y" = wes_palette("Darjeeling2", 6, type = "continuous")[5], 
           "F" = wes_palette("Darjeeling2", 6, type = "continuous")[5],
