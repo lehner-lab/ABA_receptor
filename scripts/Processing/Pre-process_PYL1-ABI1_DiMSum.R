@@ -263,7 +263,7 @@ WT.PYL1.drc.par[4] <- -WT.PYL1.drc.par[4]
 PYL1.ABI1 <- lapply(PYL1.ABI1, function(x){x$gr_normalised_WTscaled <- 100*x$gr_normalised/WT.PYL1.drc.par["B[inf]"]; return(x)})
 
 ## Save PYL1.ABI1 list as an .Rdata file
-# save(PYL1.ABI1, file = "../../data/DiMSum/PYL1-ABI1/PYL1-ABI1_preprocessed.RData")
+save(PYL1.ABI1, file = "../../data/DiMSum/PYL1-ABI1/PYL1-ABI1_preprocessed.RData")
 
 
 ## 5. Version ##

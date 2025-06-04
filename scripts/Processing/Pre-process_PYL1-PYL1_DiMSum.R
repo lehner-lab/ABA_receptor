@@ -317,8 +317,8 @@ PYL1.PYL1.250uM.ABA$gr_normalised_WTscaled <- 100*PYL1.PYL1.250uM.ABA$gr_normali
 PYL1.PYL1.250uM.ABA$gr_sigma_normalised_WTscaled <- 100*PYL1.PYL1.250uM.ABA$gr_sigma_normalised/PYL1.PYL1.250uM.ABA$gr_normalised[which(PYL1.PYL1.250uM.ABA[,"WT"] == T)[1]]
 
 ## Save PYL1.PYL1 dataframes as .Rdata files
-# save(PYL1.PYL1.0uM.ABA, file = "../data/DiMSum/PYL1-PYL1/0uM_ABA/PYL1-PYL1_0uM_ABA_preprocessed.RData")
-# save(PYL1.PYL1.250uM.ABA, file = "../data/DiMSum/PYL1-PYL1/250uM_ABA//PYL1-PYL1_250uM_ABA_preprocessed.RData")
+save(PYL1.PYL1.0uM.ABA, file = "../data/DiMSum/PYL1-PYL1/0uM_ABA/PYL1-PYL1_0uM_ABA_preprocessed.RData")
+save(PYL1.PYL1.250uM.ABA, file = "../data/DiMSum/PYL1-PYL1/250uM_ABA//PYL1-PYL1_250uM_ABA_preprocessed.RData")
 
 
 ## 5. Version ##
