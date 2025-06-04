@@ -4,7 +4,7 @@
 
 _Lehner Laboratory (Genetic Systems), Centre for Genomic Regulation (2022-2025)_
 
-This repository contains custom R scripts which - in conjunction with the associated supplementary files - can be used to replicate the main and extended data figures presented in: 
+This repository contains custom R scripts which - in conjunction with the associated supplementary files - can be used to replicate the main and supplementary figures presented in: 
 
 **[The genetic architecture of an allosteric hormone receptor (bioRxiv, 2025)](https://www.biorxiv.org/content/10.1101/2025.05.30.656975v1)**
 
