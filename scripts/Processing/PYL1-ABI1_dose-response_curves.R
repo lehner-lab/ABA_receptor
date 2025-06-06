@@ -109,7 +109,7 @@ for(i in 1:nrow(PYL1.ABI1.summary.nonWT)){
 
   print(i)
 
-  ### DRC modelling, using the R DRM package
+  ### DRC modelling, using the R DRC package (https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0146021)
 
   ### output parameter translations:
   ### b: Hill coefficient, i.e. steepness of the curve (n)
