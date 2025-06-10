@@ -127,7 +127,7 @@ dev.off()
 
 
 ## GID1A-GAI ##
-pdf("../../results/FigureS1/FigureS1B_GluePCA_benchmark_GID1A.pdf", width = 15, height = 8)
+pdf("../../results/FigureS1/FigureS1B_GluePCA_benchmark_GID1A-GAI.pdf", width = 15, height = 8)
 par(mar = c(6,8,3,0.5), mfrow = c(1,2))
 
 ### WT
@@ -197,7 +197,7 @@ dev.off()
 
 
 ## FKBP12-FRB ##
-pdf("../../results/FigureS1/FigureS1C_GluePCA_benchmark_FRB.pdf", width = 15, height = 8)
+pdf("../../results/FigureS1/FigureS1C_GluePCA_benchmark_FRB-FKBP12.pdf", width = 15, height = 8)
 par(mar = c(6,8,3,0.5), mfrow = c(1,2))
 
 ### WT
