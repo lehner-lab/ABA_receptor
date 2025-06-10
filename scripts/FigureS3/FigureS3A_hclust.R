@@ -121,3 +121,28 @@ pheatmap(t(PYL1.summary.nonWT),
 ## 3. Version ##
 ################
 
+# sessionInfo()
+# R version 4.4.1 (2024-06-14)
+# Platform: aarch64-apple-darwin20
+# Running under: macOS Sonoma 14.6.1
+# 
+# Matrix products: default
+# BLAS:   /System/Library/Frameworks/Accelerate.framework/Versions/A/Frameworks/vecLib.framework/Versions/A/libBLAS.dylib 
+# LAPACK: /Library/Frameworks/R.framework/Versions/4.4-arm64/Resources/lib/libRlapack.dylib;  LAPACK version 3.12.0
+# 
+# locale:
+# [1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
+# 
+# time zone: Europe/Madrid
+# tzcode source: internal
+# 
+# attached base packages:
+# [1] stats     graphics  grDevices utils     datasets  methods   base     
+# 
+# other attached packages:
+# [1] pheatmap_1.0.12 scales_1.3.0    stringr_1.5.1  
+# 
+# loaded via a namespace (and not attached):
+# [1] RColorBrewer_1.1-3 R6_2.6.1           magrittr_2.0.3     gtable_0.3.6       glue_1.8.0         lifecycle_1.0.4   
+# [7] cli_3.6.4          vctrs_0.6.5        grid_4.4.1         compiler_4.4.1     rstudioapi_0.17.1  tools_4.4.1       
+# [13] munsell_0.5.1      colorspace_2.1-1   rlang_1.1.5        stringi_1.8.4
