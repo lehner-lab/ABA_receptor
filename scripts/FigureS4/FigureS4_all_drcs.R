@@ -309,80 +309,6 @@ for(i in 1:length(WT.seq)){
       }
    
     }   
-    
-  #}else{
-    
-    # for(j in 1:21){
-    #   
-    #   ### extract curves and raw data points [note: some may not be available (!?])
-    #   tmp.curves[[j]] <- curves[which(curves$variable %in% names(tmp.curves)[j]),]
-    #   tmp.points[[j]] <- as.data.frame(cbind("conc" = rev(dosages),
-    #                                          "value" = rev(PYL1.summary.nonWT[which(rownames(PYL1.summary.nonWT) %in% names(tmp.points)[j]),])))
-    #   
-    #   ### save the plot(s)
-    #   if(j != tmp.WT){
-    #     
-    #     tmp.plot[[j]] <- ggplot(data = tmp.curves[[j]]) +
-    #       geom_point(data = tmp.points[[j]], aes(x = conc, y = value),
-    #                  color = cols[j], size = 10) +
-    #       geom_line(data = tmp.curves[[j]], aes(x = conc, y = value), 
-    #                 color = cols[j], linewidth = 2) +
-    #       scale_x_log10(breaks = c(9.062741e-03/3.5/3.5/3.5, 0.01, 0.1, 1, 10, 100, 1000),
-    #                     labels = c(0, 0.01, 0.1, 1, 10, 100, "1,000"),
-    #                     limits = c(9.062741e-03/3.5/3.5/3.5, 5000)) +
-    #       scale_y_continuous(breaks = seq(from = 0, to = 100, length.out = 6), limits = c(-5, 115)) +
-    #       coord_cartesian(ylim = c(-5, 115)) +
-    #       theme_classic(base_size = 50) +
-    #       theme(plot.title = element_markdown(),
-    #             plot.subtitle = element_markdown(size = 20),
-    #             title = element_text(size = 40),
-    #             axis.line.x = element_line(size = 1, color = 'black'),
-    #             axis.ticks.x = element_blank(),
-    #             axis.text.x = element_blank(),
-    #             axis.title.x = element_blank(),
-    #             axis.line.y = element_line(size = 1, color = 'black'),
-    #             axis.title.y = element_text(family = 'Helvetica', colour = cols[j], size = 100, angle = 0, vjust = 0.5, hjust = 0.5),
-    #             axis.text.y = element_text(size = 30),
-    #             legend.position = "none",
-    #             text = element_text(family="Helvetica"),
-    #             plot.margin = unit(c(1, 1, 0.5, 0.5),"cm")) +
-    #       labs(x = NULL,
-    #            y = NULL)
-    #     
-    #   }else{
-    #     
-    #     tmp.plot[[j]] <- ggplot(data = tmp.curves[[j]]) +
-    #       geom_point(data = tmp.points[[j]], aes(x = conc, y = value),
-    #                  color = "white", size = 10) +
-    #       geom_line(data = tmp.curves[[j]], aes(x = conc, y = value), 
-    #                 color = "white", linewidth = 2) +
-    #       scale_x_log10(breaks = c(9.062741e-03/3.5/3.5/3.5, 0.01, 0.1, 1, 10, 100, 1000),
-    #                     labels = c(0, 0.01, 0.1, 1, 10, 100, "1,000"),
-    #                     limits = c(9.062741e-03/3.5/3.5/3.5, 5000)) +
-    #       scale_y_continuous(breaks = seq(from = 0, to = 100, length.out = 6), limits = c(-5, 115)) +
-    #       coord_cartesian(ylim = c(-5, 115)) +
-    #       theme_classic(base_size = 50) +
-    #       theme(plot.title = element_markdown(),
-    #             plot.subtitle = element_markdown(size = 20),
-    #             title = element_text(size = 40),
-    #             axis.line.x = element_line(size = 1, color = 'black'),
-    #             axis.ticks.x = element_blank(),
-    #             axis.text.x = element_blank(),
-    #             axis.title.x = element_blank(),
-    #             axis.line.y = element_line(size = 1, color = 'black'),
-    #             axis.title.y = element_text(family = 'Helvetica', colour = cols[j], size = 100, angle = 0, vjust = 0.5, hjust = 0.5),
-    #             axis.text.y = element_text(size = 30),
-    #             legend.position = "none",
-    #             text = element_text(family="Helvetica"),
-    #             plot.margin = unit(c(0.5, 0.5, 0.5, 0.5),"cm")) +
-    #       labs(x = NULL,
-    #            y = NULL)
-    #     
-    #   }
-    #   
-    #}
-    
-  #}
   
   plots.out[[i]] <- tmp.plot
   
@@ -396,42 +322,42 @@ out.91_120 <- do.call(c, plots.out[91:120])
 out.121_150 <- do.call(c, plots.out[121:150])
 out.151_180 <- do.call(c, plots.out[151:180])
 
-pdf("../../results/FigureS4/FigureS4_1.pdf", width = 250, height = 100)
+pdf("../../results/FigureS4/FigureS4_DRCs_res033-062.pdf", width = 250, height = 100)
 plot_grid(plotlist = out.1_30,
           ncol = 30,
           nrow = 21,
           align = "v", axis = "tb", byrow = F)
 dev.off()
 
-pdf("../../results/FigureS4/FigureS4_2.pdf", width = 250, height = 100)
+pdf("../../results/FigureS4/FigureS4_DRCs_res063-093.pdf", width = 250, height = 100)
 plot_grid(plotlist = out.31_60,
           ncol = 30,
           nrow = 21,
           align = "v", axis = "tb", byrow = F)
 dev.off()
 
-pdf("../../results/FigureS4/FigureS4_3.pdf", width = 250, height = 100)
+pdf("../../results/FigureS4/FigureS4_DRCs_res93-122.pdf", width = 250, height = 100)
 plot_grid(plotlist = out.61_90,
           ncol = 30,
           nrow = 21,
           align = "v", axis = "tb", byrow = F)
 dev.off()
 
-pdf("../../results/FigureS4/FigureS4_4.pdf", width = 250, height = 100)
+pdf("../../results/FigureS4/FigureS4_DRCs_res123-152.pdf", width = 250, height = 100)
 plot_grid(plotlist = out.91_120,
           ncol = 30,
           nrow = 21,
           align = "v", axis = "tb", byrow = F)
 dev.off()
 
-pdf("../../results/FigureS4/FigureS4_5.pdf", width = 250, height = 100)
+pdf("../../results/FigureS4/FigureS4_DRCs_res153-182.pdf", width = 250, height = 100)
 plot_grid(plotlist = out.121_150,
           ncol = 30,
           nrow = 21,
           align = "v", axis = "tb", byrow = F)
 dev.off()
 
-pdf("../../results/FigureS4/FigureS4_6.pdf", width = 225, height = 100)
+pdf("../../results/FigureS4/FigureS4_DRCs_res183-209.pdf", width = 225, height = 100)
 plot_grid(plotlist = out.151_180,
           ncol = 27,
           nrow = 21,
