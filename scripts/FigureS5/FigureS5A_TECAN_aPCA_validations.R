@@ -169,3 +169,32 @@ dev.off()
 ## 4. Version ##
 ################
 
+# sessionInfo()
+# R version 4.4.1 (2024-06-14)
+# Platform: aarch64-apple-darwin20
+# Running under: macOS Sonoma 14.6.1
+# 
+# Matrix products: default
+# BLAS:   /System/Library/Frameworks/Accelerate.framework/Versions/A/Frameworks/vecLib.framework/Versions/A/libBLAS.dylib 
+# LAPACK: /Library/Frameworks/R.framework/Versions/4.4-arm64/Resources/lib/libRlapack.dylib;  LAPACK version 3.12.0
+# 
+# locale:
+# [1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
+# 
+# time zone: Europe/Madrid
+# tzcode source: internal
+# 
+# attached base packages:
+# [1] stats     graphics  grDevices utils     datasets  methods   base     
+# 
+# other attached packages:
+# [1] ggtext_0.1.2      ggplot2_3.5.1     reshape_0.8.9     scales_1.3.0      growthrates_0.8.4 deSolve_1.40      lattice_0.22-6   
+# [8] readxl_1.4.3      stringr_1.5.1    
+# 
+# loaded via a namespace (and not attached):
+# [1] Matrix_1.7-2      gtable_0.3.6      crayon_1.5.3      dplyr_1.1.4       compiler_4.4.1    tidyselect_1.2.1  Rcpp_1.0.14      
+# [8] minpack.lm_1.2-4  xml2_1.3.6        parallel_4.4.1    splines_4.4.1     coda_0.19-4.1     R6_2.6.1          plyr_1.8.9       
+# [15] generics_0.1.3    MASS_7.3-64       tibble_3.2.1      munsell_0.5.1     minqa_1.2.8       pillar_1.10.1     rlang_1.1.5      
+# [22] stringi_1.8.4     cli_3.6.4         FME_1.3.6.3       mgcv_1.9-1        withr_3.0.2       magrittr_2.0.3    gridtext_0.1.5   
+# [29] grid_4.4.1        rstudioapi_0.17.1 rootSolve_1.8.2.4 nlme_3.1-167      lifecycle_1.0.4   vctrs_0.6.5       glue_1.8.0       
+# [36] farver_2.1.2      cellranger_1.1.0  colorspace_2.1-1  tools_4.4.1       pkgconfig_2.0.3  

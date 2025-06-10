@@ -102,6 +102,7 @@ dev.off()
 ## 3. Version ##
 ################
 
+# sessionInfo()
 # R version 4.4.1 (2024-06-14)
 # Platform: aarch64-apple-darwin20
 # Running under: macOS Sonoma 14.6.1
