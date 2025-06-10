@@ -158,3 +158,30 @@ dev.off()
 ## 4. Version ##
 ################
 
+# sessionInfo()
+# R version 4.4.1 (2024-06-14)
+# Platform: aarch64-apple-darwin20
+# Running under: macOS Sonoma 14.6.1
+# 
+# Matrix products: default
+# BLAS:   /System/Library/Frameworks/Accelerate.framework/Versions/A/Frameworks/vecLib.framework/Versions/A/libBLAS.dylib 
+# LAPACK: /Library/Frameworks/R.framework/Versions/4.4-arm64/Resources/lib/libRlapack.dylib;  LAPACK version 3.12.0
+# 
+# locale:
+# [1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
+# 
+# time zone: Europe/Madrid
+# tzcode source: internal
+# 
+# attached base packages:
+# [1] stats     graphics  grDevices utils     datasets  methods   base     
+# 
+# other attached packages:
+# [1] cowplot_1.1.3 ggrepel_0.9.6 ggtext_0.1.2  ggplot2_3.5.1 reshape_0.8.9 scales_1.3.0  stringr_1.5.1 readxl_1.4.3 
+# 
+# loaded via a namespace (and not attached):
+# [1] gtable_0.3.6      dplyr_1.1.4       compiler_4.4.1    tidyselect_1.2.1  Rcpp_1.0.14       xml2_1.3.6        R6_2.6.1         
+# [8] plyr_1.8.9        commonmark_1.9.2  generics_0.1.3    tibble_3.2.1      munsell_0.5.1     pillar_1.10.1     rlang_1.1.5      
+# [15] stringi_1.8.4     xfun_0.51         cli_3.6.4         withr_3.0.2       magrittr_2.0.3    grid_4.4.1        gridtext_0.1.5   
+# [22] rstudioapi_0.17.1 markdown_1.13     lifecycle_1.0.4   vctrs_0.6.5       glue_1.8.0        farver_2.1.2      cellranger_1.1.0 
+# [29] colorspace_2.1-1  tools_4.4.1       pkgconfig_2.0.3  
