@@ -22,4 +22,6 @@ Scripts require the following R packages: [**`readxl`**](https://cran.r-project.
 
 Although care has been taken to make the code distribution-independent, it is possible that some of the scripts only work on Unix/MacOS systems, and may need to be modified in order to run on Windows systems.
 
+Raw sequencing data for reproducing the [variant fitness calculations](/data/DimSum) can be found under the [European Nucleotide Archive BioProject accession no. PRJEB89674](https://www.ebi.ac.uk/ena/browser/view/PRJEB89674).
+
 For any feedback or requests, please get in touch with me via email: maximilian.stammnitz@crg.eu
