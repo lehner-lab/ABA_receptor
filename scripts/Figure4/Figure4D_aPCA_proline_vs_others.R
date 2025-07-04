@@ -69,14 +69,26 @@ for(i in 1:nrow(PYL1.PYL1.0uM.ABA)){
 wilcox.test(x = PYL1.list$Proline, y = PYL1.list$Other) ## P = 3.444e-12
 
 pdf('../../results/Figure4/Figure4D_aPCA_proline_vs_others.pdf', height = 6, width = 12)
-par(mar = c(4,13,1,0))
+par(mar = c(6,13,1,0))
 
-beeswarm(PYL1.list, pch = 16, 
-         method = "compactswarm", cex = 0.5,
-         bty = "n", ylim = c(0, 130), main = "", cex.main = 3,
-         col = c("black"), ylab = "", 
-         cex.lab = 3, cex.axis = 4.5, yaxt = "n")
-axis(2, at = c(seq(f = 0, t = 100, length.out = 6), 150), 
+names(PYL1.list) <- c("Proline\n(N = 171)", "Other\n(N = 3,187)")
+beeswarm(PYL1.list, 
+         pch = 16, 
+         method = "compactswarm",
+         cex = 0.5,
+         bty = "n",
+         main = "", 
+         cex.main = 3,
+         col = c("black"),
+         ylim = c(0, 130),
+         axes = F,
+         cex.lab = 3,
+         cex.axis = 2.8, 
+         yaxt = "n")
+axis(1, at = c(1, 2), labels = names(PYL1.list), 
+     cex.axis = 3.5, tick = F, padj = 0.6)
+axis(2, 
+     at = c(seq(f = 0, t = 100, length.out = 6), 150), 
      labels = c(seq(f = 0, t = 100, length.out = 6), ""), las = 2,
      line = 1, cex.axis = 2.5)
 mtext("Abundance", side = 2, line = 8, cex = 4.5)

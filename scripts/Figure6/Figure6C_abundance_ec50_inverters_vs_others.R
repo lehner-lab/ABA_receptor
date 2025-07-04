@@ -87,8 +87,9 @@ labels.cols[which(is.na(labels.cols) == T)] <- "black"
 names(labels.cols[which(is.na(names(labels.cols) == T))]) <- "*"
 
 pdf("../../results/Figure6/Figure6C_aPCA_inverters.pdf", width = 14, height = 8)
-par(mar = c(4,13,1,0))
+par(mar = c(6,13,1,0))
 
+names(abundance.comp) <- c("Hypersensitive\n(N = 80)", "Inverters\n(N = 11)", "Others\n(N = 3,450)")
 boxplot(abundance.comp, 
         cex = 1, 
         ylim = c(0, 130), 
@@ -136,11 +137,11 @@ points(x = labels.pos3$x + 2,
 
 ## add X-axis
 axis(1, at = 1, labels = names(abundance.comp)[1], las = 1, col = 'black', 
-     cex.axis = 3, lwd = 3, col.ticks = F, padj = 0.5, tick = F)
+     cex.axis = 3, lwd = 3, col.ticks = F, padj = 0.6, tick = F)
 axis(1, at = 2, labels = names(abundance.comp)[2], las = 1, col = 'black', 
-     cex.axis = 3, lwd = 3, col.ticks = F, padj = 0.5, tick = F)
+     cex.axis = 3, lwd = 3, col.ticks = F, padj = 0.6, tick = F)
 axis(1, at = 3, labels = names(abundance.comp)[3], las = 1, col = 'black', 
-     cex.axis = 3, lwd = 3, col.ticks = F, padj = 0.5, tick = F)
+     cex.axis = 3, lwd = 3, col.ticks = F, padj = 0.6, tick = F)
 
 ## add Y-axis
 axis(2, at = seq(f = 0, t = 120, length.out = 7), 
@@ -161,8 +162,9 @@ ec50.comp <- list("Inverters" = as.numeric(ec50.out[match(inverted.binders, rown
                                                                 which(rownames(ec50.out) %in% inverted.binders)))),"EC_50 [mean]"]))
 
 pdf("../../results/Figure6/Figure6C_EC50_inverters.pdf", width = 9.5, height = 8)
-par(mar = c(4,13,1,0))
+par(mar = c(6,13,1,0))
 
+names(ec50.comp) <- c("Inverters\n(N = 11)", "Others\n(N = 3,530)")
 boxplot(ec50.comp, 
         cex = 1, 
         log = "y", 
@@ -205,9 +207,9 @@ points(x = labels.pos2$x + 1,
 
 ## add X-axis
 axis(1, at = 1, labels = names(ec50.comp)[1], las = 1, col = 'black', 
-     cex.axis = 3, lwd = 3, col.ticks = F, padj = 0.5, tick = F)
+     cex.axis = 3, lwd = 3, col.ticks = F, padj = 0.6, tick = F)
 axis(1, at = 2, labels = names(ec50.comp)[2], las = 1, col = 'black', 
-     cex.axis = 3, lwd = 3, col.ticks = F, padj = 0.5, tick = F)
+     cex.axis = 3, lwd = 3, col.ticks = F, padj = 0.6, tick = F)
 
 ## add Y-axis
 axis(2, at = c(0.01, 0.1, 1, 10, 100, 1000),
