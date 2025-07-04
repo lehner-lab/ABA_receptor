@@ -106,7 +106,7 @@ beeswarm(PYL1.list,
          cex.axis = 2.8, 
          yaxt = "n")
 axis(1, at = c(1, 2), labels = names(PYL1.list), 
-     cex.axis = 3.5, tick = F, padj = 0.7)
+     cex.axis = 3.5, tick = F, padj = 0.6)
 axis(2, 
      at = c(seq(f = 0, t = 100, length.out = 6), 150), 
      labels = c(seq(f = 0, t = 100, length.out = 6), ""), las = 2,
