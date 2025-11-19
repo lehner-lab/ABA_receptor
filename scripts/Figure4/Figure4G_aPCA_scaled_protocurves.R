@@ -1,7 +1,7 @@
 # The genetic architecture of an allosteric hormone receptor
 # Maximilian R. Stammnitz & Ben Lehner
 # bioRxiv link: https://www.biorxiv.org/content/10.1101/2025.05.30.656975v1
-# 31.05.2025
+# 19.11.2025
 # © M.R.S. (maximilian.stammnitz@crg.eu)
 
 #########################################
@@ -32,8 +32,8 @@ PYL1.PYL1.0uM.ABA <- PYL1.PYL1.0uM.ABA[-which(PYL1.PYL1.0uM.ABA[,"Nham_aa"] == 0
 PYL1.PYL1.0uM.ABA <- PYL1.PYL1.0uM.ABA[-which(PYL1.PYL1.0uM.ABA[,"Mut"] == "*"),]
 
 ## input Hill parameter distributions from dose-response curve fits, filter like in Figure 2
-load("../../data/DRCs/PYL1-ABI1_parameters_Hill.RData")
-parameters.Hill <- parameters.Hill[which(parameters.Hill[,"EC50 P"] < 0.05 & parameters.Hill[,"Hill P"] < 0.05 & parameters.Hill[,"R^2"] > 0.95),]
+load("../../data/DRCs/PYL1-ABI1_parameters_Hill_12conc.RData")
+parameters.Hill <- parameters.Hill[which(parameters.Hill[,"R^2"] > 0.9),]
 parameters.Hill <- parameters.Hill[-grep("[*]", rownames(parameters.Hill)),]
 
 
@@ -132,18 +132,18 @@ out.4G <- ggplot(protocurves.lines, aes(x = conc, y = value)) +
   scale_y_continuous(breaks = seq(from = 0, to = 100, length.out = 6), limits = c(-5, 115)) +
   theme_classic(base_size = 50) +
   theme(plot.title = element_markdown(),
-        axis.text = element_text(size = 70),
+        axis.text = element_text(size = 45),
         axis.line.x = element_line(size = 1, color = 'black'),
         axis.line.y = element_line(size = 1, color = 'black'),
-        axis.title.x = element_text(family = 'Helvetica', colour = 'black', size = 80, vjust = -1),
-        axis.title.y = element_text(family = 'Helvetica', colour = 'black', size = 100, vjust = 3),
+        axis.title.x = element_text(family = 'Helvetica', colour = 'black', size = 60, vjust = -1),
+        axis.title.y = element_text(family = 'Helvetica', colour = 'black', size = 50, vjust = 3),
         legend.title = element_text(size = 35, family = "Helvetica", face = "bold"),
         legend.text = element_text(size = 30, family = "Helvetica"),
         legend.key.size = unit(3, "lines"),
         text = element_text(family="Helvetica"),
         plot.margin = unit(c(2, 2, 2, 2),"cm")) +
-  labs(x = "(+)-ABA conc. (µM)",
-       y = "Expected Binding",
+  labs(x = "(+)-ABA concentration (µM)",
+       y = "Relative PYL1/ABI1 Binding (expected)",
        color = "Abundance")
 
 print(out.4G)
@@ -155,13 +155,13 @@ dev.off()
 ################
 
 # sessionInfo()
-# R version 4.4.1 (2024-06-14)
+# R version 4.5.1 (2025-06-13)
 # Platform: aarch64-apple-darwin20
-# Running under: macOS Sonoma 14.6.1
+# Running under: macOS Sequoia 15.6.1
 # 
 # Matrix products: default
 # BLAS:   /System/Library/Frameworks/Accelerate.framework/Versions/A/Frameworks/vecLib.framework/Versions/A/libBLAS.dylib 
-# LAPACK: /Library/Frameworks/R.framework/Versions/4.4-arm64/Resources/lib/libRlapack.dylib;  LAPACK version 3.12.0
+# LAPACK: /Library/Frameworks/R.framework/Versions/4.5-arm64/Resources/lib/libRlapack.dylib;  LAPACK version 3.12.1
 # 
 # locale:
 # [1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
@@ -173,12 +173,9 @@ dev.off()
 # [1] stats     graphics  grDevices utils     datasets  methods   base     
 # 
 # other attached packages:
-# [1] viridis_0.6.5     viridisLite_0.4.2 ggtext_0.1.2      ggplot2_3.5.1     reshape_0.8.9     scales_1.3.0     
-# [7] stringr_1.5.1    
+# [1] viridis_0.6.5     viridisLite_0.4.2 ggtext_0.1.2      ggplot2_4.0.0     reshape_0.8.10    scales_1.4.0      stringr_1.5.2    
 # 
 # loaded via a namespace (and not attached):
-# [1] crayon_1.5.3      vctrs_0.6.5       cli_3.6.4         rlang_1.1.5       stringi_1.8.4     generics_0.1.3   
-# [7] glue_1.8.0        colorspace_2.1-1  plyr_1.8.9        gridExtra_2.3     gridtext_0.1.5    grid_4.4.1       
-# [13] munsell_0.5.1     tibble_3.2.1      lifecycle_1.0.4   compiler_4.4.1    dplyr_1.1.4       Rcpp_1.0.14      
-# [19] pkgconfig_2.0.3   rstudioapi_0.17.1 farver_2.1.2      R6_2.6.1          tidyselect_1.2.1  pillar_1.10.1    
-# [25] magrittr_2.0.3    withr_3.0.2       tools_4.4.1       gtable_0.3.6      xml2_1.3.6       
+# [1] crayon_1.5.3       vctrs_0.6.5        cli_3.6.5          rlang_1.1.6        stringi_1.8.7      generics_0.1.4     S7_0.2.0           glue_1.8.0         plyr_1.8.9         gridExtra_2.3     
+# [11] gridtext_0.1.5     grid_4.5.1         tibble_3.3.0       lifecycle_1.0.4    compiler_4.5.1     dplyr_1.1.4        RColorBrewer_1.1-3 Rcpp_1.1.0         pkgconfig_2.0.3    farver_2.1.2      
+# [21] R6_2.6.1           tidyselect_1.2.1   pillar_1.11.1      magrittr_2.0.4     withr_3.0.2        tools_4.5.1        gtable_0.3.6       xml2_1.4.0  

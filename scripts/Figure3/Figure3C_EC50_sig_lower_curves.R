@@ -1,7 +1,7 @@
 # The genetic architecture of an allosteric hormone receptor
 # Maximilian R. Stammnitz & Ben Lehner
 # bioRxiv link: https://www.biorxiv.org/content/10.1101/2025.05.30.656975v1
-# 31.05.2025
+# 19.11.2025
 # © M.R.S. (maximilian.stammnitz@crg.eu)
 
 ##############################################################
@@ -27,7 +27,7 @@ lapply(packages, library, character.only = TRUE)
 ##################################
 
 ## Load
-load("../../data/DiMSum/PYL1-ABI1/PYL1-ABI1_preprocessed.RData")
+load("../../data/DiMSum/PYL1-ABI1_12conc/PYL1-ABI1_preprocessed_12conc.RData")
 
 ## remove synonymous variants
 PYL1.ABI1 <- lapply(PYL1.ABI1, function(x){y <- x[-which(x[,"Nham_aa"] == 0 & is.na(x[,"WT"]) == T),]; return(y)})
@@ -93,7 +93,7 @@ rm(PYL1.ABI1, PYL1.summary, tmp.vars, i, ids, j, pos.mut, tmp.mut, tmp.pos, WT, 
 ########################
 
 ## calculate curves
-load("../../data/DRCs/PYL1-ABI1_parameters_Hill.RData")
+load("../../data/DRCs/PYL1-ABI1_parameters_Hill_12conc.RData")
 input <- parameters.Hill[grep("WT|H87|R164",rownames(parameters.Hill)),]
 
 ## Define the four-parameter logistic function
@@ -213,43 +213,43 @@ out.3C.H87 <- ggplot(data = curves.H87, aes(x = conc, y = variable)) +
             aes(group = variable, x = conc, y = value), 
             linewidth = 3, alpha = 1, colour = curves.H87$col) +
   geom_point(data = points.H87, aes(x = conc, y = H87G),
-             size = 6, alpha = 0.6, colour = cols.H87$col[1]) +
+             size = 6, shape = 16, alpha = 0.6, colour = cols.H87$col[1]) +
   geom_point(data = points.H87, aes(x = conc, y = H87A),
-             size = 6, alpha = 0.6, colour = cols.H87$col[2]) +
+             size = 6, shape = 16, alpha = 0.6, colour = cols.H87$col[2]) +
   geom_point(data = points.H87, aes(x = conc, y = H87V),
-             size = 6, alpha = 0.6, colour = cols.H87$col[3]) +
+             size = 6, shape = 16, alpha = 0.6, colour = cols.H87$col[3]) +
   geom_point(data = points.H87, aes(x = conc, y = H87P),
-             size = 6, alpha = 0.6, colour = cols.H87$col[4]) +
+             size = 6, shape = 16, alpha = 0.6, colour = cols.H87$col[4]) +
   annotate("text", x = 0.0003, y = parameters.Hill["H87P","B[0]"] + 10, 
-           size = 15, label = paste0("P (", round(parameters.Hill["H87P","EC50"]/parameters.Hill["WT","EC50"], 2), "×)"), 
+           size = 15, label = paste0("P (", format(round(parameters.Hill["H87P","EC50"]/parameters.Hill["WT","EC50"], digits = 2), nsmall = 2), "×)"), 
            color = cols.H87["H87P","col"], hjust = 0) +
   annotate("text", x = 0.0003, y = parameters.Hill["H87V","B[0]"] + 10, 
-           size = 15, label = paste0("V (", round(parameters.Hill["H87V","EC50"]/parameters.Hill["WT","EC50"], 2), "×)"), 
+           size = 15, label = paste0("V (", format(round(parameters.Hill["H87V","EC50"]/parameters.Hill["WT","EC50"], digits = 2), nsmall = 2), "×)"), 
            color = cols.H87["H87V","col"], hjust = 0) +
   annotate("text", x = 0.0003, y = parameters.Hill["H87A","B[0]"] + 10, 
-           size = 15, label = paste0("A (", round(parameters.Hill["H87A","EC50"]/parameters.Hill["WT","EC50"], 2), "×)"), 
+           size = 15, label = paste0("A (", format(round(parameters.Hill["H87A","EC50"]/parameters.Hill["WT","EC50"], digits = 2), nsmall = 2), "×)"), 
            color = cols.H87["H87A","col"], hjust = 0) +
   annotate("text", x = 0.0003, y = parameters.Hill["H87G","B[0]"] + 10, 
-           size = 15, label = paste0("G (", round(parameters.Hill["H87G","EC50"]/parameters.Hill["WT","EC50"], 2), "×)"), 
+           size = 15, label = paste0("G (", format(round(parameters.Hill["H87G","EC50"]/parameters.Hill["WT","EC50"], digits = 2), nsmall = 2), "×)"), 
            color = cols.H87["H87G","col"], hjust = 0) +
   scale_x_log10(breaks = c(9.062741e-03/3.5/3.5/3.5, 0.01, 0.1, 1, 10, 100, 1000),
                 labels = c(0, 0.01, 0.1, 1, 10, 100, "1,000"),
                 limits = c(9.062741e-03/3.5/3.5/3.5, 5000)) +
-  scale_y_continuous(breaks = seq(from = 0, to = 100, length.out = 6), limits = c(-10, 150)) +
+  scale_y_continuous(breaks = seq(from = 0, to = 100, length.out = 6), limits = c(-150, 150)) +
   coord_cartesian(ylim = c(-5, 120)) +
   theme_classic(base_size = 50) +
   theme(plot.title = element_markdown(size = 80),
         axis.text = element_text(size = 40),
         axis.line.x = element_line(linewidth = 1, color = 'black'),
         axis.line.y = element_line(linewidth = 1, color = 'black'),
-        axis.title.x = element_text(family = 'Helvetica', colour = 'black', size = 70, vjust = -1),
-        axis.title.y = element_text(family = 'Helvetica', colour = 'black', size = 70, vjust = 3),
+        axis.title.x = element_text(family = 'Helvetica', colour = 'black', size = 55, vjust = -1),
+        axis.title.y = element_text(family = 'Helvetica', colour = 'black', size = 55, vjust = 3),
         legend.position = "none",
         text = element_text(family="Helvetica"),
         plot.margin = unit(c(1, 1, 2, 2),"cm")) +
   labs(title = "H87",
-       x = "(+)-ABA conc. (µM)",
-       y = "Binding")
+       x = "(+)-ABA concentration (µM)",
+       y = "Relative PYL1/ABI1 Binding")
 
 print(out.3C.H87)
 
@@ -293,38 +293,38 @@ out.3C.R164 <- ggplot(data = curves.R164, aes(x = conc, y = variable)) +
             aes(group = variable, x = conc, y = value), 
             linewidth = 3, alpha = 1, colour = curves.R164$col) +
   geom_point(data = points.R164, aes(x = conc, y = R164W),
-             size = 7, alpha = 0.6, colour = cols.R164$col[1]) +
+             size = 7, shape = 16, alpha = 0.6, colour = cols.R164$col[1]) +
   geom_point(data = points.R164, aes(x = conc, y = R164D),
-             size = 7, alpha = 0.6, colour = cols.R164$col[2]) +
+             size = 7, shape = 16, alpha = 0.6, colour = cols.R164$col[2]) +
   geom_point(data = points.R164, aes(x = conc, y = R164N),
-             size = 7, alpha = 0.6, colour = cols.R164$col[3]) +
+             size = 7, shape = 16, alpha = 0.6, colour = cols.R164$col[3]) +
   annotate("text", x = 0.0003, y = parameters.Hill["R164W","B[0]"] + 10, 
            size = 15, label = paste0("W (3.80×)"), 
            color = cols.R164["R164W","col"], hjust = 0) +
   annotate("text", x = 0.0003, y = parameters.Hill["R164D","B[0]"] + 14, 
-           size = 15, label = paste0("D (", round(parameters.Hill["R164D","EC50"]/parameters.Hill["WT","EC50"], 2), "×)"), 
+           size = 15, label = paste0("D (", format(round(parameters.Hill["R164D","EC50"]/parameters.Hill["WT","EC50"], digits = 2), nsmall = 2), "×)"), 
            color = cols.R164["R164D","col"], hjust = 0) +
   annotate("text", x = 0.0003, y = parameters.Hill["R164N","B[0]"] + 16, 
-           size = 15, label = paste0("N (", round(parameters.Hill["R164N","EC50"]/parameters.Hill["WT","EC50"], 2), "×)"), 
+           size = 15, label = paste0("N (", format(round(parameters.Hill["R164N","EC50"]/parameters.Hill["WT","EC50"], digits = 2), nsmall = 2), "×)"), 
            color = cols.R164["R164N","col"], hjust = 0) +
   scale_x_log10(breaks = c(9.062741e-03/3.5/3.5/3.5, 0.01, 0.1, 1, 10, 100, 1000),
                 labels = c(0, 0.01, 0.1, 1, 10, 100, "1,000"),
                 limits = c(9.062741e-03/3.5/3.5/3.5, 5000)) +
-  scale_y_continuous(breaks = seq(from = 0, to = 100, length.out = 6), limits = c(-10, 150)) +
+  scale_y_continuous(breaks = seq(from = 0, to = 100, length.out = 6), limits = c(-150, 150)) +
   coord_cartesian(ylim = c(-5, 120)) +
   theme_classic(base_size = 50) +
   theme(plot.title = element_markdown(size = 80),
         axis.text = element_text(size = 40),
         axis.line.x = element_line(linewidth = 1, color = 'black'),
         axis.line.y = element_line(linewidth = 1, color = 'black'),
-        axis.title.x = element_text(family = 'Helvetica', colour = 'black', size = 70, vjust = -1),
-        axis.title.y = element_text(family = 'Helvetica', colour = 'black', size = 70, vjust = 3),
+        axis.title.x = element_text(family = 'Helvetica', colour = 'black', size = 55, vjust = -1),
+        axis.title.y = element_text(family = 'Helvetica', colour = 'black', size = 55, vjust = 3),
         legend.position = "none",
         text = element_text(family="Helvetica"),
         plot.margin = unit(c(1, 1, 2, 2),"cm")) +
   labs(title = "R164",
-       x = "(+)-ABA conc. (µM)",
-       y = "Binding")
+       x = "(+)-ABA concentration (µM)",
+       y = "Relative PYL1/ABI1 Binding")
 
 print(out.3C.R164)
 
@@ -335,13 +335,13 @@ dev.off()
 ################
 
 # sessionInfo()
-# R version 4.4.1 (2024-06-14)
+# R version 4.5.1 (2025-06-13)
 # Platform: aarch64-apple-darwin20
-# Running under: macOS Sonoma 14.6.1
+# Running under: macOS Sequoia 15.6.1
 # 
 # Matrix products: default
 # BLAS:   /System/Library/Frameworks/Accelerate.framework/Versions/A/Frameworks/vecLib.framework/Versions/A/libBLAS.dylib 
-# LAPACK: /Library/Frameworks/R.framework/Versions/4.4-arm64/Resources/lib/libRlapack.dylib;  LAPACK version 3.12.0
+# LAPACK: /Library/Frameworks/R.framework/Versions/4.5-arm64/Resources/lib/libRlapack.dylib;  LAPACK version 3.12.1
 # 
 # locale:
 # [1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
@@ -353,14 +353,11 @@ dev.off()
 # [1] stats     graphics  grDevices utils     datasets  methods   base     
 # 
 # other attached packages:
-# [1] ggtext_0.1.2  ggplot2_3.5.1 reshape_0.8.9 drc_3.0-1     MASS_7.3-64   scales_1.3.0  stringr_1.5.1
+# [1] ggtext_0.1.2   ggplot2_4.0.0  reshape_0.8.10 drc_3.0-1      MASS_7.3-65    scales_1.4.0   stringr_1.5.2 
 # 
 # loaded via a namespace (and not attached):
-# [1] sandwich_3.1-1    generics_0.1.3    xml2_1.3.6        gtools_3.9.5      stringi_1.8.4     lattice_0.22-6   
-# [7] magrittr_2.0.3    grid_4.4.1        mvtnorm_1.3-3     plyr_1.8.9        Matrix_1.7-2      Formula_1.2-5    
-# [13] survival_3.8-3    multcomp_1.4-28   TH.data_1.1-3     codetools_0.2-20  abind_1.4-8       cli_3.6.4        
-# [19] rlang_1.1.5       munsell_0.5.1     commonmark_1.9.2  splines_4.4.1     withr_3.0.2       plotrix_3.8-4    
-# [25] tools_4.4.1       dplyr_1.1.4       colorspace_2.1-1  vctrs_0.6.5       R6_2.6.1          zoo_1.8-12       
-# [31] lifecycle_1.0.4   car_3.1-3         pkgconfig_2.0.3   pillar_1.10.1     gtable_0.3.6      glue_1.8.0       
-# [37] Rcpp_1.0.14       xfun_0.51         tibble_3.2.1      tidyselect_1.2.1  rstudioapi_0.17.1 farver_2.1.2     
-# [43] carData_3.0-5     compiler_4.4.1    markdown_1.13     gridtext_0.1.5   
+# [1] Matrix_1.7-4       gtable_0.3.6       dplyr_1.1.4        compiler_4.5.1     gtools_3.9.5       tidyselect_1.2.1   plotrix_3.8-4      Rcpp_1.1.0         xml2_1.4.0         splines_4.5.1     
+# [11] lattice_0.22-7     TH.data_1.1-4      R6_2.6.1           plyr_1.8.9         commonmark_2.0.0   generics_0.1.4     Formula_1.2-5      tibble_3.3.0       car_3.1-3          pillar_1.11.1     
+# [21] RColorBrewer_1.1-3 rlang_1.1.6        multcomp_1.4-28    stringi_1.8.7      xfun_0.53          litedown_0.7       S7_0.2.0           cli_3.6.5          withr_3.0.2        magrittr_2.0.4    
+# [31] gridtext_0.1.5     grid_4.5.1         mvtnorm_1.3-3      markdown_2.0       sandwich_3.1-1     lifecycle_1.0.4    vctrs_0.6.5        glue_1.8.0         farver_2.1.2       codetools_0.2-20  
+# [41] zoo_1.8-14         survival_3.8-3     abind_1.4-8        carData_3.0-5      pkgconfig_2.0.3    tools_4.5.1

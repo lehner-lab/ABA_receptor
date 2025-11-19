@@ -1,7 +1,7 @@
 # The genetic architecture of an allosteric hormone receptor
 # Maximilian R. Stammnitz & Ben Lehner
 # bioRxiv link: https://www.biorxiv.org/content/10.1101/2025.05.30.656975v1
-# 31.05.2025
+# 19.11.2025
 # © M.R.S. (maximilian.stammnitz@crg.eu)
 
 #############################################
@@ -13,7 +13,7 @@
 ####################
 
 ## Libraries
-packages <- c("stringr", "drc", "reshape", "ggplot2", "ggtext")
+packages <- c("stringr", "drc", "reshape", "ggplot2", "ggtext", "rlang")
 
 ## Install missing packages
 install_if_missing <- function(pkg) {if (!requireNamespace(pkg, quietly = TRUE)) install.packages(pkg)}
@@ -27,7 +27,7 @@ lapply(packages, library, character.only = TRUE)
 ##################################
 
 ## Load
-load("../../data/DiMSum/PYL1-ABI1/PYL1-ABI1_preprocessed.RData")
+load("../../data/DiMSum/PYL1-ABI1_12conc/PYL1-ABI1_preprocessed_12conc.RData")
 
 ## Extract WT aa variants (incl. synonymous ones)
 PYL1.ABI1.WT <- lapply(PYL1.ABI1, function(x){y <- x[which(x[,"Nham_aa"] == 0),]; return(y)})
@@ -65,11 +65,11 @@ WT.PYL1.drc.par <- WT.PYL1.drc.par[c(2:4,1)]
 WT.PYL1.drc.par[4] <- -WT.PYL1.drc.par[4]
 
 ## Predict the full, smoothened curve (using 1000 data points) and confidence interval
-WT.PYL1.drc$concentration[12] <- 9.062741e-03/3.5/3.5/3.5 ## "0-conc." positioning for log scale
 WT.drc.predict.newdata <- expand.grid(conc = c(0, exp(seq(log(0.001), log(5000), length = 999))))
 WT.PYL1.drc.predict <- predict(WT.PYL1.drc,
                                newdata = WT.drc.predict.newdata,
-                               interval = "confidence")
+                               interval = "confidence",
+                               level = 0.95)
 WT.drc.predict.newdata$p <- WT.PYL1.drc.predict[,1]
 WT.drc.predict.newdata$pmin <- WT.PYL1.drc.predict[,2]
 WT.drc.predict.newdata$pmax <- WT.PYL1.drc.predict[,3]
@@ -85,9 +85,13 @@ PYL1.ABI1.WT.curves <- as.data.frame(PYL1.ABI1.WT.curves)
 
 ## Display data points only for the main (exact) WT sequence
 PYL1.ABI1.WT.mat.exact <- cbind("conc" = as.numeric(colnames(PYL1.ABI1.WT.mat)),
-                                "WT" = as.numeric(PYL1.ABI1.WT.mat[PYL1.ABI1.WT$`2500`[which(PYL1.ABI1.WT$`2500`$WT == T)[1],"nt_seq"],]))
+                                "WT" = as.numeric(PYL1.ABI1.WT.mat[PYL1.ABI1.WT$`2500`[which(PYL1.ABI1.WT$`2500`$WT == T)[1],"nt_seq"],]),
+                                "WT sigma" = as.numeric(apply(PYL1.ABI1.WT.mat, 2, sd)))
 PYL1.ABI1.WT.mat.exact[12,1] <- 9.062741e-03/3.5/3.5/3.5 ## "0-conc." positioning for log scale
 PYL1.ABI1.WT.mat.exact <- as.data.frame(PYL1.ABI1.WT.mat.exact)
+
+## Define colors palette
+grad_colors <- colorRampPalette(c("darkgreen", "white"))(12)
 
 ## R^2 of fit
 predicted_values <- predict(WT.PYL1.drc)
@@ -102,9 +106,14 @@ pdf("../../results/Figure1/Figure1D_WT_main_dose_response_curve.pdf",
 out.1D <- ggplot(data = PYL1.ABI1.WT.curves) +
   geom_ribbon(data = WT.drc.predict.newdata, aes(x = conc, y = p, ymin = pmin, ymax = pmax),
               alpha = 0.2, fill = "grey50") +
-  geom_point(data = PYL1.ABI1.WT.mat.exact, aes(x = conc, y = WT),
-             color = "black", size = 10) +
+  geom_errorbar(data = PYL1.ABI1.WT.mat.exact,
+                aes(x = conc,
+                    ymin = `WT` - `WT sigma` * 1.96,
+                    ymax = `WT` + `WT sigma` * 1.96),
+                color = "black", width = 0, linewidth = 1) +
   geom_line(data = PYL1.ABI1.WT.curves, aes(x = conc, y = B), linewidth = 1.5) +
+  geom_point(data = PYL1.ABI1.WT.mat.exact, aes(x = conc, y = WT),
+             fill = grad_colors, color = "black", size = 8, shape = 21) +
   scale_x_log10(breaks = c(9.062741e-03/3.5/3.5/3.5, 0.01, 0.1, 1, 10, 100, 1000),
                 labels = c(0, 0.01, 0.1, 1, 10, 100, "1,000"),
                 limits = c(9.062741e-03/3.5/3.5/3.5, 5000)) +
@@ -113,7 +122,8 @@ out.1D <- ggplot(data = PYL1.ABI1.WT.curves) +
   annotate("text",
            x = 9.062741e-03/3.5/3.5/3.5,
            y = 105,
-           label = bquote(italic(R)^2 == .(format(r_squared, digits = 2))),  ##
+           label = expr_text(bquote(italic(R)^2 == .(format(r_squared, digits = 2)))),
+           parse = T,
            hjust = 0, size = 25, color = "black") +
   theme_classic(base_size = 50) +
   theme(plot.title = element_markdown(),
@@ -122,13 +132,13 @@ out.1D <- ggplot(data = PYL1.ABI1.WT.curves) +
         axis.text = element_text(size = 40),
         axis.line.x = element_line(size = 1, color = 'black'),
         axis.line.y = element_line(size = 1, color = 'black'),
-        axis.title.x = element_text(family = 'Helvetica', colour = 'black', size = 50, vjust = -1),
-        axis.title.y = element_text(family = 'Helvetica', colour = 'black', size = 50, vjust = 3),
+        axis.title.x = element_text(family = 'Helvetica', colour = 'black', size = 40, vjust = -1),
+        axis.title.y = element_text(family = 'Helvetica', colour = 'black', size = 40, vjust = 3),
         legend.position = "none",
         text = element_text(family="Helvetica"),
         plot.margin = unit(c(2, 2, 2, 2),"cm")) +
-  labs(x = "(+)-ABA conc. (µM)",
-       y = "Binding (library sequencing)")
+  labs(x = "(+)-ABA concentration (µM)",
+       y = "Relative PYL1/ABI1 Binding")
 
 print(out.1D)
 
@@ -139,13 +149,13 @@ dev.off()
 ################
 
 # sessionInfo()
-# R version 4.4.1 (2024-06-14)
+# R version 4.5.1 (2025-06-13)
 # Platform: aarch64-apple-darwin20
-# Running under: macOS Sonoma 14.6.1
+# Running under: macOS Sequoia 15.6.1
 # 
 # Matrix products: default
 # BLAS:   /System/Library/Frameworks/Accelerate.framework/Versions/A/Frameworks/vecLib.framework/Versions/A/libBLAS.dylib 
-# LAPACK: /Library/Frameworks/R.framework/Versions/4.4-arm64/Resources/lib/libRlapack.dylib;  LAPACK version 3.12.0
+# LAPACK: /Library/Frameworks/R.framework/Versions/4.5-arm64/Resources/lib/libRlapack.dylib;  LAPACK version 3.12.1
 # 
 # locale:
 # [1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
@@ -157,14 +167,11 @@ dev.off()
 # [1] stats     graphics  grDevices utils     datasets  methods   base     
 # 
 # other attached packages:
-# [1] ggtext_0.1.2  ggplot2_3.5.1 reshape_0.8.9 drc_3.0-1     MASS_7.3-64   stringr_1.5.1
+# [1] rlang_1.1.6    ggtext_0.1.2   ggplot2_4.0.0  reshape_0.8.10 drc_3.0-1      MASS_7.3-65    stringr_1.5.2 
 # 
 # loaded via a namespace (and not attached):
-# [1] Matrix_1.7-2      gtable_0.3.6      crayon_1.5.3      dplyr_1.1.4       compiler_4.4.1    gtools_3.9.5     
-# [7] tidyselect_1.2.1  plotrix_3.8-4     Rcpp_1.0.14       xml2_1.3.6        splines_4.4.1     scales_1.3.0     
-# [13] lattice_0.22-6    TH.data_1.1-3     R6_2.6.1          plyr_1.8.9        generics_0.1.3    Formula_1.2-5    
-# [19] tibble_3.2.1      car_3.1-3         munsell_0.5.1     pillar_1.10.1     rlang_1.1.5       multcomp_1.4-28  
-# [25] stringi_1.8.4     cli_3.6.4         withr_3.0.2       magrittr_2.0.3    gridtext_0.1.5    grid_4.4.1       
-# [31] rstudioapi_0.17.1 mvtnorm_1.3-3     sandwich_3.1-1    lifecycle_1.0.4   vctrs_0.6.5       glue_1.8.0       
-# [37] farver_2.1.2      codetools_0.2-20  zoo_1.8-12        survival_3.8-3    abind_1.4-8       carData_3.0-5    
-# [43] colorspace_2.1-1  pkgconfig_2.0.3   tools_4.4.1  
+# [1] Matrix_1.7-4       gtable_0.3.6       crayon_1.5.3       dplyr_1.1.4        compiler_4.5.1     gtools_3.9.5       tidyselect_1.2.1   plotrix_3.8-4      Rcpp_1.1.0         xml2_1.4.0        
+# [11] splines_4.5.1      scales_1.4.0       lattice_0.22-7     TH.data_1.1-4      R6_2.6.1           plyr_1.8.9         generics_0.1.4     Formula_1.2-5      tibble_3.3.0       car_3.1-3         
+# [21] pillar_1.11.1      RColorBrewer_1.1-3 multcomp_1.4-28    stringi_1.8.7      S7_0.2.0           cli_3.6.5          withr_3.0.2        magrittr_2.0.4     gridtext_0.1.5     grid_4.5.1        
+# [31] mvtnorm_1.3-3      sandwich_3.1-1     lifecycle_1.0.4    vctrs_0.6.5        glue_1.8.0         farver_2.1.2       codetools_0.2-20   zoo_1.8-14         survival_3.8-3     abind_1.4-8       
+# [41] carData_3.0-5      pkgconfig_2.0.3    tools_4.5.1     

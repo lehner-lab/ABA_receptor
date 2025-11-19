@@ -1,7 +1,7 @@
 # The genetic architecture of an allosteric hormone receptor
 # Maximilian R. Stammnitz & Ben Lehner
 # bioRxiv link: https://www.biorxiv.org/content/10.1101/2025.05.30.656975v1
-# 31.05.2025
+# 19.11.2025
 # © M.R.S. (maximilian.stammnitz@crg.eu)
 
 #########################################
@@ -80,18 +80,18 @@ beeswarm(PYL1.list,
          main = "", 
          cex.main = 3,
          col = c("black"),
-         ylim = c(0, 130),
+         ylim = c(-20, 130),
          axes = F,
          cex.lab = 3,
          cex.axis = 2.8, 
          yaxt = "n")
 axis(1, at = c(1, 2), labels = names(PYL1.list), 
-     cex.axis = 3.5, tick = F, padj = 0.6)
+     cex.axis = 2.5, tick = F, padj = 0.6)
 axis(2, 
-     at = c(seq(f = 0, t = 100, length.out = 6), 150), 
-     labels = c(seq(f = 0, t = 100, length.out = 6), ""), las = 2,
-     line = 1, cex.axis = 2.5)
-mtext("Abundance", side = 2, line = 8, cex = 4.5)
+     at = seq(f = 0, t = 100, length.out = 6), 
+     labels = seq(f = 0, t = 100, length.out = 6), las = 2,
+     line = 1, cex.axis = 2)
+mtext("Relative PYL1 Abundance", side = 2, line = 8, cex = 2.5)
 
 dev.off()
 
@@ -100,13 +100,13 @@ dev.off()
 ################
 
 # sessionInfo()
-# R version 4.4.1 (2024-06-14)
+# R version 4.5.1 (2025-06-13)
 # Platform: aarch64-apple-darwin20
-# Running under: macOS Sonoma 14.6.1
+# Running under: macOS Sequoia 15.6.1
 # 
 # Matrix products: default
 # BLAS:   /System/Library/Frameworks/Accelerate.framework/Versions/A/Frameworks/vecLib.framework/Versions/A/libBLAS.dylib 
-# LAPACK: /Library/Frameworks/R.framework/Versions/4.4-arm64/Resources/lib/libRlapack.dylib;  LAPACK version 3.12.0
+# LAPACK: /Library/Frameworks/R.framework/Versions/4.5-arm64/Resources/lib/libRlapack.dylib;  LAPACK version 3.12.1
 # 
 # locale:
 # [1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
@@ -118,8 +118,8 @@ dev.off()
 # [1] stats     graphics  grDevices utils     datasets  methods   base     
 # 
 # other attached packages:
-# [1] beeswarm_0.4.0 scales_1.3.0   stringr_1.5.1 
+# [1] beeswarm_0.4.0 scales_1.4.0   stringr_1.5.2 
 # 
 # loaded via a namespace (and not attached):
-# [1] colorspace_2.1-1  compiler_4.4.1    R6_2.6.1          magrittr_2.0.3    cli_3.6.4         tools_4.4.1      
-# [7] glue_1.8.0        rstudioapi_0.17.1 stringi_1.8.4     lifecycle_1.0.4   munsell_0.5.1     rlang_1.1.5     
+# [1] compiler_4.5.1     R6_2.6.1           magrittr_2.0.4     cli_3.6.5          tools_4.5.1        RColorBrewer_1.1-3 glue_1.8.0         farver_2.1.2       stringi_1.8.7      lifecycle_1.0.4   
+# [11] rlang_1.1.6

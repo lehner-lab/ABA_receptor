@@ -1,7 +1,7 @@
 # The genetic architecture of an allosteric hormone receptor
 # Maximilian R. Stammnitz & Ben Lehner
 # bioRxiv link: https://www.biorxiv.org/content/10.1101/2025.05.30.656975v1
-# 31.05.2025
+# 19.11.2025
 # © M.R.S. (maximilian.stammnitz@crg.eu)
 
 ######################################
@@ -28,10 +28,89 @@ lapply(packages, library, character.only = TRUE)
 
 ## Input aPCA
 load("../../data/DiMSum/PYL1-PYL1/0uM_ABA/PYL1-PYL1_0uM_ABA_preprocessed.RData")
+#load("../../data/DiMSum/PYL1-PYL1/250uM_ABA/PYL1-PYL1_250uM_ABA_preprocessed.RData")
 
 ## remove synonymous variants
 PYL1.PYL1.0uM.ABA <- PYL1.PYL1.0uM.ABA[-which(PYL1.PYL1.0uM.ABA[,"Nham_aa"] == 0 & is.na(PYL1.PYL1.0uM.ABA[,"WT"]) == T),]
 PYL1.PYL1.0uM.ABA <- PYL1.PYL1.0uM.ABA[-which(PYL1.PYL1.0uM.ABA[,"Nham_aa"] == 0 & is.na(PYL1.PYL1.0uM.ABA[,"WT"]) == F)[-1],]
+# PYL1.PYL1.250uM.ABA <- PYL1.PYL1.250uM.ABA[-which(PYL1.PYL1.250uM.ABA[,"Nham_aa"] == 0 & is.na(PYL1.PYL1.250uM.ABA[,"WT"]) == T),]
+# PYL1.PYL1.250uM.ABA <- PYL1.PYL1.250uM.ABA[-which(PYL1.PYL1.250uM.ABA[,"Nham_aa"] == 0 & is.na(PYL1.PYL1.250uM.ABA[,"WT"]) == F)[-1],]
+
+### for Supplementary Table 2B: summarise in one matrix
+# PYL1.PYL1.summary <- matrix(NA, nrow = 177*21, ncol = 2)
+# colnames(PYL1.PYL1.summary) <- c("0", "250")
+# ids <- c()
+# for(i in 1:177){
+#   tmp.pos <- rep(str_split_fixed(PYL1.PYL1.0uM.ABA[which(PYL1.PYL1.0uM.ABA$WT)[1],"aa_seq"], "", 177)[i], 21)
+#   ids <- c(ids, paste0(tmp.pos, i + 32))
+# }
+# rownames(PYL1.PYL1.summary) <- paste0(ids, rep(c("G", "A", "V", "L", "M",
+#                                                  "I", "F", "Y", "W", "K",
+#                                                  "R", "H", "D", "E", "S",
+#                                                  "T", "C", "N", "Q", "P",
+#                                                  "*"),177))
+# WT <- str_split_fixed(PYL1.PYL1.0uM.ABA[which(PYL1.PYL1.0uM.ABA$WT)[1],"aa_seq"], "", 177)[1,]
+
+### fill in 0 µM (+)-ABA conc. results
+# tmp.vars <- str_split_fixed(PYL1.PYL1.0uM.ABA$aa_seq,"",177)
+# for(i in 1:nrow(tmp.vars)){
+# 
+#   ### only take the "best" WT
+#   if(all(tmp.vars[i,] == WT)){
+# 
+#     PYL1.PYL1.summary[paste0(WT, 33:209, WT),"0"] <- PYL1.PYL1.0uM.ABA[i,"gr_normalised_WTscaled"]
+#     next
+# 
+#   }
+# 
+#   pos.mut <- which(tmp.vars[i,] != WT)
+# 
+#   ### skip if higher-order mutant
+#   if(length(pos.mut) > 1){
+# 
+#     next
+# 
+#   }
+# 
+#   ### otherwise obtain the corresponding fitness
+#   tmp.mut <- paste0(WT[pos.mut], pos.mut + 32, tmp.vars[i,pos.mut])
+#   PYL1.PYL1.summary[tmp.mut,"0"] <- PYL1.PYL1.0uM.ABA[i,"gr_normalised_WTscaled"]
+# 
+# }
+
+### fill in 250 µM (+)-ABA conc. results
+# tmp.vars <- str_split_fixed(PYL1.PYL1.250uM.ABA$aa_seq,"",177)
+# for(i in 1:nrow(tmp.vars)){
+# 
+#   ### only take the "best" WT
+#   if(all(tmp.vars[i,] == WT)){
+# 
+#     PYL1.PYL1.summary[paste0(WT, 33:209, WT),"250"] <- PYL1.PYL1.250uM.ABA[i,"gr_normalised_WTscaled"]
+#     next
+# 
+#   }
+# 
+#   pos.mut <- which(tmp.vars[i,] != WT)
+# 
+#   ### skip if higher-order mutant
+#   if(length(pos.mut) > 1){
+# 
+#     next
+# 
+#   }
+# 
+#   ### otherwise obtain the corresponding fitness
+#   tmp.mut <- paste0(WT[pos.mut], pos.mut + 32, tmp.vars[i,pos.mut])
+#   PYL1.PYL1.summary[tmp.mut,"250"] <- PYL1.PYL1.250uM.ABA[i,"gr_normalised_WTscaled"]
+# 
+# }
+
+# ### remove WT repetition 
+# WTs.pos <- match(paste0(WT, 33:209, WT), rownames(PYL1.PYL1.summary))
+# PYL1.PYL1.summary.nonWT <- PYL1.PYL1.summary[-WTs.pos[-1],]
+# PYL1.PYL1.summary.nonWT <- PYL1.PYL1.summary.nonWT[c(16,1:15,17:nrow(PYL1.PYL1.summary.nonWT)),]
+# rownames(PYL1.PYL1.summary.nonWT)[1] <- "WT"
+# write.table(PYL1.PYL1.summary.nonWT, file = "../../data/Supplementary Tables/TableS2B.txt", sep = "\t", quote = F, col.names = T, row.names = T)
 
 
 ## 2. Matrix format ##
@@ -108,7 +187,7 @@ class(meta) <- "numeric"
 meta <- as.data.frame(meta)
 
 pheatmap(t(PYL1.PYL1.mat),
-         color = magma(n = 1000),
+         color = magma(n = 1000, begin = 0, end = 1),
          breaks = seq(f = 0, to = 130, length.out = 1000),
          show_rownames = T,
          cluster_rows = F,
@@ -133,54 +212,54 @@ pheatmap(t(PYL1.PYL1.mat),
 ## 4. Mean abundance per residue on structure ##
 ################################################
 
-## Re-build matrix
-PYL1.PYL1.mat <- matrix(NA, nrow = 177, ncol = 21)
-rownames(PYL1.PYL1.mat) <- paste0(WT.seq, 33:209)
-colnames(PYL1.PYL1.mat) <- c("G", "A", "V", "L", "M", "I", "F", 
-                             "Y", "W", "K", "R", "H", "D", "E", 
-                             "S", "T", "C", "N", "Q", "P","*")
-
-### fill-in aPCA matrix
-for(i in 1:nrow(PYL1.PYL1.0uM.ABA)){
-  
-  if(PYL1.PYL1.0uM.ABA[i,"WT_AA"] == "WT"){
-    next
-  }
-  
-  tmp.WT <- paste0(PYL1.PYL1.0uM.ABA[i,"WT_AA"], PYL1.PYL1.0uM.ABA[i,"Pos"])
-  tmp.MUT <- PYL1.PYL1.0uM.ABA[i,"Mut"]
-  PYL1.PYL1.mat[tmp.WT,tmp.MUT] <- PYL1.PYL1.0uM.ABA[i,"gr_normalised_WTscaled"]
-  
-}
-
-## calculate mean abundance per position
-PYL1.PYL1.mean <- apply(PYL1.PYL1.mat[,-21], 1, mean, na.rm = T)
-
-## import PDB
-PYL1_PYL1.pdb <- read.pdb(file = "../../data/PDB/original/Melcher_2009_ApoPYL1/pdb3kay.ent")
-
-## overwrite PDB file B-factor values
-PYL1_PYL1.pdb$atom$b <- 0
-for (i in 4:length(PYL1.PYL1.mean)){
-  tmp.res <- substr(names(PYL1.PYL1.mean)[i], 2, nchar(names(PYL1.PYL1.mean)[i]))
-  PYL1_PYL1.pdb$atom[which(PYL1_PYL1.pdb$atom[,"resno"] == tmp.res & PYL1_PYL1.pdb$atom$chain == "A"),"b"] <- PYL1.PYL1.mean[i]
-}
-
-### export
-write.pdb(PYL1_PYL1.pdb, file = "../../data/PDB/modified/Figure4C_PYL1_PYL1.ent")
+# ## Re-build matrix
+# PYL1.PYL1.mat <- matrix(NA, nrow = 177, ncol = 21)
+# rownames(PYL1.PYL1.mat) <- paste0(WT.seq, 33:209)
+# colnames(PYL1.PYL1.mat) <- c("G", "A", "V", "L", "M", "I", "F",
+#                              "Y", "W", "K", "R", "H", "D", "E",
+#                              "S", "T", "C", "N", "Q", "P","*")
+# 
+# ### fill-in aPCA matrix
+# for(i in 1:nrow(PYL1.PYL1.0uM.ABA)){
+# 
+#   if(PYL1.PYL1.0uM.ABA[i,"WT_AA"] == "WT"){
+#     next
+#   }
+# 
+#   tmp.WT <- paste0(PYL1.PYL1.0uM.ABA[i,"WT_AA"], PYL1.PYL1.0uM.ABA[i,"Pos"])
+#   tmp.MUT <- PYL1.PYL1.0uM.ABA[i,"Mut"]
+#   PYL1.PYL1.mat[tmp.WT,tmp.MUT] <- PYL1.PYL1.0uM.ABA[i,"gr_normalised_WTscaled"]
+# 
+# }
+# 
+# ## calculate mean abundance per position
+# PYL1.PYL1.mean <- apply(PYL1.PYL1.mat[,-21], 1, mean, na.rm = T)
+# 
+# ## import PDB
+# PYL1_PYL1.pdb <- read.pdb(file = "../../data/PDB/original/Melcher_2009_ApoPYL1/pdb3kay.ent")
+# 
+# ## overwrite PDB file B-factor values
+# PYL1_PYL1.pdb$atom$b <- 0
+# for (i in 4:length(PYL1.PYL1.mean)){
+#   tmp.res <- substr(names(PYL1.PYL1.mean)[i], 2, nchar(names(PYL1.PYL1.mean)[i]))
+#   PYL1_PYL1.pdb$atom[which(PYL1_PYL1.pdb$atom[,"resno"] == tmp.res & PYL1_PYL1.pdb$atom$chain == "A"),"b"] <- PYL1.PYL1.mean[i]
+# }
+# 
+# ### export
+# write.pdb(PYL1_PYL1.pdb, file = "../../data/PDB/modified/Figure4C_PYL1_PYL1.ent")
 
 
 ## 5. Version ##
 ################
 
 # sessionInfo()
-# R version 4.4.1 (2024-06-14)
+# R version 4.5.1 (2025-06-13)
 # Platform: aarch64-apple-darwin20
-# Running under: macOS Sonoma 14.6.1
+# Running under: macOS Sequoia 15.6.1
 # 
 # Matrix products: default
 # BLAS:   /System/Library/Frameworks/Accelerate.framework/Versions/A/Frameworks/vecLib.framework/Versions/A/libBLAS.dylib 
-# LAPACK: /Library/Frameworks/R.framework/Versions/4.4-arm64/Resources/lib/libRlapack.dylib;  LAPACK version 3.12.0
+# LAPACK: /Library/Frameworks/R.framework/Versions/4.5-arm64/Resources/lib/libRlapack.dylib;  LAPACK version 3.12.1
 # 
 # locale:
 # [1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
@@ -192,11 +271,9 @@ write.pdb(PYL1_PYL1.pdb, file = "../../data/PDB/modified/Figure4C_PYL1_PYL1.ent"
 # [1] stats     graphics  grDevices utils     datasets  methods   base     
 # 
 # other attached packages:
-# [1] bio3d_2.4-5       pheatmap_1.0.12   viridis_0.6.5     viridisLite_0.4.2 stringr_1.5.1    
+# [1] bio3d_2.4-5       pheatmap_1.0.13   viridis_0.6.5     viridisLite_0.4.2 stringr_1.5.2    
 # 
 # loaded via a namespace (and not attached):
-# [1] vctrs_0.6.5        cli_3.6.4          rlang_1.1.5        stringi_1.8.4      generics_0.1.3     glue_1.8.0        
-# [7] colorspace_2.1-1   gridExtra_2.3      scales_1.3.0       grid_4.4.1         munsell_0.5.1      tibble_3.2.1      
-# [13] lifecycle_1.0.4    compiler_4.4.1     dplyr_1.1.4        RColorBrewer_1.1-3 Rcpp_1.0.14        pkgconfig_2.0.3   
-# [19] rstudioapi_0.17.1  farver_2.1.2       R6_2.6.1           tidyselect_1.2.1   parallel_4.4.1     pillar_1.10.1     
-# [25] magrittr_2.0.3     tools_4.4.1        gtable_0.3.6       ggplot2_3.5.1     
+# [1] vctrs_0.6.5        cli_3.6.5          rlang_1.1.6        stringi_1.8.7      generics_0.1.4     S7_0.2.0           glue_1.8.0         gridExtra_2.3      scales_1.4.0       grid_4.5.1        
+# [11] tibble_3.3.0       lifecycle_1.0.4    compiler_4.5.1     dplyr_1.1.4        RColorBrewer_1.1-3 Rcpp_1.1.0         pkgconfig_2.0.3    farver_2.1.2       R6_2.6.1           tidyselect_1.2.1  
+# [21] pillar_1.11.1      parallel_4.5.1     magrittr_2.0.4     tools_4.5.1        gtable_0.3.6       ggplot2_4.0.0

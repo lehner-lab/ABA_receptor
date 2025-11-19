@@ -1,7 +1,7 @@
 # The genetic architecture of an allosteric hormone receptor
 # Maximilian R. Stammnitz & Ben Lehner
 # bioRxiv link: https://www.biorxiv.org/content/10.1101/2025.05.30.656975v1
-# 31.05.2025
+# 19.11.2025
 # © M.R.S. (maximilian.stammnitz@crg.eu)
 
 #####################################
@@ -13,7 +13,7 @@
 ####################
 
 # Libraries
-packages <- c("stringr", "scales", "reshape", "ggplot2", "ggtext", "cowplot")
+packages <- c("stringr", "scales", "reshape", "ggplot2", "ggtext", "cowplot", "rlang")
 
 ## Install missing packages
 install_if_missing <- function(pkg) {if (!requireNamespace(pkg, quietly = TRUE)) install.packages(pkg)}
@@ -27,10 +27,11 @@ lapply(packages, library, character.only = TRUE)
 #######################################
 
 ## input
-load("../../data/DRCs/PYL1-ABI1_parameters_Hill.RData")
+load("../../data/DRCs/PYL1-ABI1_parameters_Hill_12conc.RData")
 
 ## remove stops
-Hill.parameters.filtered <- parameters.Hill[-grep("[*]", rownames(parameters.Hill)),]
+Hill.parameters.filtered <- parameters.Hill[which(parameters.Hill[,"R^2"] > 0.9),]
+Hill.parameters.filtered <- Hill.parameters.filtered[-grep("[*]", rownames(Hill.parameters.filtered)),]
 
 ## calculate log10-fold change between WT and variant
 ec50_log10FC <- log10(Hill.parameters.filtered[-1,"EC50"] / Hill.parameters.filtered["WT","EC50"])
@@ -155,13 +156,13 @@ PYL1.negEC50_logFC.ABA.Gb_half <- c(log(2)/coef(PYL1.negEC50_logFC.ABA.exp.decay
 out.1 <- ggplot(data.all.posFC, aes(x = ABA_dist, y = abs(EC50_logFC))) +
   geom_point(data = data.all.posFC, 
              aes(x = ABA_dist, y = abs(EC50_logFC), color = squish(abs(EC50_logFC), range = c(-4.5, 4.5))), 
-             shape = 16, size = 1.5, alpha = 1) +  
+             shape = 16, size = 0.5, alpha = 1) +  
   scale_colour_gradient2(low = "blue", mid = "gray90", high = "red", 
                          midpoint = 0, 
                          limits = c(-2,2),
                          oob = squish) +
   geom_ribbon(data = PYL1.posEC50_logFC.ABA.exp.decay.full, aes(x = ABA_dist, y = fit, ymin = lower, ymax = upper), alpha = 0.2, fill = "grey") + 
-  geom_line(data = PYL1.posEC50_logFC.ABA.exp.decay.full, aes(x = ABA_dist, y = fit), color = "black", linewidth = 1) +
+  geom_line(data = PYL1.posEC50_logFC.ABA.exp.decay.full, aes(x = ABA_dist, y = fit), color = "black", linewidth = 1.5) +
   geom_vline(xintercept = 5, color = "black", linewidth = 0.75) +
   scale_x_continuous(breaks = seq(from = 0, to = 35, by = 5), limits = c(0, 37)) +
   scale_y_continuous(breaks = seq(from = 0, to = 4, by = 1), limits = c(-10000,10000),
@@ -170,12 +171,14 @@ out.1 <- ggplot(data.all.posFC, aes(x = ABA_dist, y = abs(EC50_logFC))) +
   annotate("text",
            x = 16.5,
            y = 3.8,
-           label = bquote(log[10]("k") == .(format(-round(PYL1.posEC50_logFC.ABA.rate[1], 2), nsmall = 2)) * " Å"^{-1}),
+           label = expr_text(bquote(log[10]("k") == .(format(-round(as.numeric(PYL1.posEC50_logFC.ABA.rate[1]), 2), nsmall = 2)) * " Å"^{-1})),
+           parse = T,
            hjust = 0, size = 10, color = "black") +
   annotate("text",
            x = 16.5,
            y = 3.5,
-           label = bquote(log[10](d[50]) == .(format(round(PYL1.posEC50_logFC.ABA.Gb_half[1], 2), nsmall = 2)) * " Å"),
+           label = expr_text(bquote(log[10](d[50]) == .(format(round(as.numeric(PYL1.posEC50_logFC.ABA.Gb_half[1]), 2), nsmall = 2)) * " Å")),
+           parse = T,
            hjust = 0, size = 10, color = "black") +
   theme_classic(base_size = 50) +
   theme(plot.title = element_markdown(),
@@ -195,7 +198,7 @@ out.1 <- ggplot(data.all.posFC, aes(x = ABA_dist, y = abs(EC50_logFC))) +
 out.2 <- ggplot(data.all.negFC, aes(x = ABA_dist, y = abs(EC50_logFC))) +
   geom_point(data = data.all.negFC, 
              aes(x = ABA_dist, y = abs(EC50_logFC), color = squish(abs(EC50_logFC), range = c(-4.5, 4.5))), 
-             shape = 16, size = 1.5, alpha = 1) +  
+             shape = 16, size = 0.5, alpha = 1) +  
   scale_colour_gradient2(low = "red", mid = "gray90", high = "blue", 
                          midpoint = 0, 
                          limits = c(-2,2),
@@ -203,7 +206,7 @@ out.2 <- ggplot(data.all.negFC, aes(x = ABA_dist, y = abs(EC50_logFC))) +
   geom_point(data = data.all.negFC[grep("87|164|165|166", rownames(data.all.negFC)),], 
              aes(x = ABA_dist, y = abs(EC50_logFC), color = squish(abs(EC50_logFC), range = c(-4.5, 4.5))), 
              shape = 16, color = "black", 
-             size = 4, alpha = 1) +  
+             size = 2.5, alpha = 1) +  
   geom_ribbon(data = PYL1.negEC50_logFC.ABA.exp.decay.full, aes(x = ABA_dist, y = fit, ymin = lower, ymax = upper), alpha = 0.2, fill = "grey") + 
   geom_line(data = PYL1.negEC50_logFC.ABA.exp.decay.full, aes(x = ABA_dist, y = fit), color = "black", linewidth = 1.5) +
   geom_vline(xintercept = 5, color = "black", linewidth = 0.75) +
@@ -214,12 +217,14 @@ out.2 <- ggplot(data.all.negFC, aes(x = ABA_dist, y = abs(EC50_logFC))) +
   annotate("text",
            x = 16.5,
            y = 1.9,
-           label = bquote(log[10]("k") == .(format(-round(PYL1.negEC50_logFC.ABA.rate[1], 2), nsmall = 2)) * " Å"^{-1}),
+           label = expr_text(bquote(log[10]("k") == .(format(-round(as.numeric(PYL1.negEC50_logFC.ABA.rate[1]), 2), nsmall = 2)) * " Å"^{-1})),
+           parse = T,
            hjust = 0, size = 10, color = "black") +
   annotate("text",
            x = 16.5,
            y = 1.75,
-           label = bquote(log[10](d[50]) == .(format(round(PYL1.negEC50_logFC.ABA.Gb_half[1], 2), nsmall = 2)) * " Å"),
+           label = expr_text(bquote(log[10](d[50]) == .(format(round(as.numeric(PYL1.negEC50_logFC.ABA.Gb_half[1]), 2), nsmall = 2)) * " Å")),
+           parse = T,
            hjust = 0, size = 10, color = "black") +
   theme_classic(base_size = 50) +
   theme(plot.title = element_markdown(),
@@ -247,13 +252,13 @@ dev.off()
 ################
 
 # sessionInfo()
-# R version 4.4.1 (2024-06-14)
+# R version 4.5.1 (2025-06-13)
 # Platform: aarch64-apple-darwin20
-# Running under: macOS Sonoma 14.6.1
+# Running under: macOS Sequoia 15.6.1
 # 
 # Matrix products: default
 # BLAS:   /System/Library/Frameworks/Accelerate.framework/Versions/A/Frameworks/vecLib.framework/Versions/A/libBLAS.dylib 
-# LAPACK: /Library/Frameworks/R.framework/Versions/4.4-arm64/Resources/lib/libRlapack.dylib;  LAPACK version 3.12.0
+# LAPACK: /Library/Frameworks/R.framework/Versions/4.5-arm64/Resources/lib/libRlapack.dylib;  LAPACK version 3.12.1
 # 
 # locale:
 # [1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
@@ -265,11 +270,9 @@ dev.off()
 # [1] stats     graphics  grDevices utils     datasets  methods   base     
 # 
 # other attached packages:
-# [1] cowplot_1.1.3 ggtext_0.1.2  ggplot2_3.5.1 reshape_0.8.9 scales_1.3.0  stringr_1.5.1
+# [1] rlang_1.1.6    cowplot_1.2.0  ggtext_0.1.2   ggplot2_4.0.0  reshape_0.8.10 scales_1.4.0   stringr_1.5.2 
 # 
 # loaded via a namespace (and not attached):
-# [1] crayon_1.5.3      vctrs_0.6.5       cli_3.6.4         rlang_1.1.5       stringi_1.8.4     generics_0.1.3   
-# [7] labeling_0.4.3    glue_1.8.0        colorspace_2.1-1  plyr_1.8.9        gridtext_0.1.5    grid_4.4.1       
-# [13] munsell_0.5.1     tibble_3.2.1      lifecycle_1.0.4   compiler_4.4.1    dplyr_1.1.4       Rcpp_1.0.14      
-# [19] pkgconfig_2.0.3   rstudioapi_0.17.1 farver_2.1.2      R6_2.6.1          tidyselect_1.2.1  pillar_1.10.1    
-# [25] magrittr_2.0.3    withr_3.0.2       tools_4.4.1       gtable_0.3.6      xml2_1.3.6     
+# [1] crayon_1.5.3       vctrs_0.6.5        cli_3.6.5          stringi_1.8.7      generics_0.1.4     S7_0.2.0           labeling_0.4.3     glue_1.8.0         plyr_1.8.9         gridtext_0.1.5    
+# [11] grid_4.5.1         tibble_3.3.0       lifecycle_1.0.4    compiler_4.5.1     dplyr_1.1.4        RColorBrewer_1.1-3 Rcpp_1.1.0         pkgconfig_2.0.3    farver_2.1.2       R6_2.6.1          
+# [21] tidyselect_1.2.1   pillar_1.11.1      magrittr_2.0.4     withr_3.0.2        tools_4.5.1        gtable_0.3.6       xml2_1.4.0  

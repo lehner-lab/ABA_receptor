@@ -1,7 +1,7 @@
 # The genetic architecture of an allosteric hormone receptor
 # Maximilian R. Stammnitz & Ben Lehner
 # bioRxiv link: https://www.biorxiv.org/content/10.1101/2025.05.30.656975v1
-# 31.05.2025
+# 19.11.2025
 # © M.R.S. (maximilian.stammnitz@crg.eu)
 
 ###############################################################
@@ -27,10 +27,10 @@ lapply(packages, library, character.only = TRUE)
 ##################################################
 
 ## input
-load("../../data/DRCs/PYL1-ABI1_parameters_Hill.RData")
+load("../../data/DRCs/PYL1-ABI1_parameters_Hill_12conc.RData")
 
 ## filter like in Figure 2
-Hill.parameters.filtered <- parameters.Hill[which(parameters.Hill[,"EC50 P"] < 0.05 & parameters.Hill[,"Hill P"] < 0.05 & parameters.Hill[,"R^2"] > 0.95),]
+Hill.parameters.filtered <- parameters.Hill[which(parameters.Hill[,"R^2"] > 0.8),]
 Hill.parameters.filtered <- Hill.parameters.filtered[-grep("[*]", rownames(Hill.parameters.filtered)),]
 
 ## residue-level: summarise EC50s and EC50 fold-changes
@@ -40,20 +40,20 @@ rownames(ec50_per_res) <- paste0(strsplit("TQDEFTQLSQSIAEFHTYQLGNGRCSSLLAQRIHAPP
 colnames(ec50_per_res) <- c(c("G", "A", "V", "L", "M", "I", "F", 
                               "Y", "W", "K", "R", "H", "D", "E", 
                               "S", "T", "C", "N", "Q", "P","*"))
-for(i in 2:nrow(parameters.Hill)){
-  tmp.id <- rownames(parameters.Hill)[i]
+for(i in 2:nrow(Hill.parameters.filtered)){
+  tmp.id <- rownames(Hill.parameters.filtered)[i]
   aa.id <- substr(tmp.id, 1, nchar(tmp.id) - 1)
   mut.id <- substr(tmp.id, nchar(tmp.id), nchar(tmp.id))
-  ec50_per_res[aa.id,mut.id] <- parameters.Hill[i,"EC50"]
+  ec50_per_res[aa.id,mut.id] <- Hill.parameters.filtered[i,"EC50"]
 }
-ec50_per_res_FC <- ec50_per_res / parameters.Hill["WT","EC50"]
+ec50_per_res_FC <- ec50_per_res / Hill.parameters.filtered["WT","EC50"]
 
 
 ## 2. Plot beeswarm of mutations, colour by chemotype ##
 ########################################################
 
-beeswarm.out <- vector(mode = "list", length = 5)
-names(beeswarm.out) <- c("H87", "R164", "Q199", "T118", "A190")
+beeswarm.out <- vector(mode = "list", length = 4)
+names(beeswarm.out) <- c("H87", "R164", "Q199", "T118")
 for(i in 1:length(beeswarm.out)){
   beeswarm.out[[i]] <- ec50_per_res_FC[match(names(beeswarm.out)[i], rownames(ec50_per_res_FC)),-21]
   beeswarm.out[[i]] <- beeswarm.out[[i]][-which(is.na(beeswarm.out[[i]]))]
@@ -77,7 +77,7 @@ cols.out <- beeswarm.out.labels
 cols.out <- beeswarm.cols[match(cols.out, names(beeswarm.cols))]
 
 ## plot
-pdf("../../results/Figure3/Figure3F_EC50_FC_chemotype.pdf", width = 23, height = 14)
+pdf("../../results/Figure3/Figure3F_EC50_FC_chemotype.pdf", width = 19, height = 14)
 par(mar = c(6,14,1,0))
 
 boxplot(beeswarm.out, 
@@ -111,7 +111,7 @@ text(x = labels.pos$x, y = labels.pos$y,
      col = cols.out, cex = 3.5)
 
 ## add X-axis
-names(beeswarm.out) <- c("H87", "R164", "Q199", "T118", "A190")
+names(beeswarm.out) <- c("H87", "R164", "Q199", "T118")
 axis(1, at = 1, labels = names(beeswarm.out)[1], las = 1, col = 'black', 
      cex.axis = 5, lwd = 3, col.ticks = F, padj = 0.5, tick = F)
 axis(1, at = 2, labels = names(beeswarm.out)[2], las = 1, col = 'black', 
@@ -119,8 +119,6 @@ axis(1, at = 2, labels = names(beeswarm.out)[2], las = 1, col = 'black',
 axis(1, at = 3, labels = names(beeswarm.out)[3], las = 1, col = 'black', 
      cex.axis = 5, lwd = 3, col.ticks = F, padj = 0.5, tick = F)
 axis(1, at = 4, labels = names(beeswarm.out)[4], las = 1, col = 'black', 
-     cex.axis = 5, lwd = 3, col.ticks = F, padj = 0.5, tick = F)
-axis(1, at = 5, labels = names(beeswarm.out)[5], las = 1, col = 'black',
      cex.axis = 5, lwd = 3, col.ticks = F, padj = 0.5, tick = F)
 
 ## add Y-axis
@@ -152,13 +150,13 @@ dev.off()
 ################
 
 # sessionInfo()
-# R version 4.4.1 (2024-06-14)
+# R version 4.5.1 (2025-06-13)
 # Platform: aarch64-apple-darwin20
-# Running under: macOS Sonoma 14.6.1
+# Running under: macOS Sequoia 15.6.1
 # 
 # Matrix products: default
 # BLAS:   /System/Library/Frameworks/Accelerate.framework/Versions/A/Frameworks/vecLib.framework/Versions/A/libBLAS.dylib 
-# LAPACK: /Library/Frameworks/R.framework/Versions/4.4-arm64/Resources/lib/libRlapack.dylib;  LAPACK version 3.12.0
+# LAPACK: /Library/Frameworks/R.framework/Versions/4.5-arm64/Resources/lib/libRlapack.dylib;  LAPACK version 3.12.1
 # 
 # locale:
 # [1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
@@ -170,8 +168,8 @@ dev.off()
 # [1] stats     graphics  grDevices utils     datasets  methods   base     
 # 
 # other attached packages:
-# [1] beeswarm_0.4.0    wesanderson_0.3.7 scales_1.3.0      stringr_1.5.1    
+# [1] beeswarm_0.4.0    wesanderson_0.3.7 scales_1.4.0      stringr_1.5.2    
 # 
 # loaded via a namespace (and not attached):
-# [1] colorspace_2.1-1  compiler_4.4.1    R6_2.6.1          magrittr_2.0.3    cli_3.6.4         tools_4.4.1      
-# [7] glue_1.8.0        rstudioapi_0.17.1 stringi_1.8.4     lifecycle_1.0.4   munsell_0.5.1     rlang_1.1.5     
+# [1] compiler_4.5.1     R6_2.6.1           magrittr_2.0.4     cli_3.6.5          tools_4.5.1        RColorBrewer_1.1-3 glue_1.8.0         farver_2.1.2       stringi_1.8.7      lifecycle_1.0.4   
+# [11] rlang_1.1.6  

@@ -1,7 +1,7 @@
 # The genetic architecture of an allosteric hormone receptor
 # Maximilian R. Stammnitz & Ben Lehner
 # bioRxiv link: https://www.biorxiv.org/content/10.1101/2025.05.30.656975v1
-# 31.05.2025
+# 19.11.2025
 # © M.R.S. (maximilian.stammnitz@crg.eu)
 
 ################################################
@@ -13,7 +13,7 @@
 ####################
 
 ## Libraries
-packages <- c("stringr", "scales", "pheatmap", "grid", "gridExtra", "cowplot")
+packages <- c("stringr", "scales", "pheatmap", "grid", "gridExtra", "cowplot", "bio3d")
 
 ## Install missing packages
 install_if_missing <- function(pkg) {if (!requireNamespace(pkg, quietly = TRUE)) install.packages(pkg)}
@@ -27,7 +27,7 @@ lapply(packages, library, character.only = TRUE)
 ###################################
 
 ## Load
-load("../../data/DiMSum/PYL1-ABI1/PYL1-ABI1_preprocessed.RData")
+load("../../data/DiMSum/PYL1-ABI1_12conc/PYL1-ABI1_preprocessed_12conc.RData")
 
 ## Build matrices
 PYL1.ABI1.B <- vector(mode = "list", length = 12)
@@ -130,7 +130,7 @@ meta <- as.data.frame(meta)
 p.out <- vector(mode = "list", length = 12)
 for (i in 1:12){
   
-  if(i != 12){
+  #if(i != 12){
 
     p.out[[i]] <- pheatmap(t(PYL1.ABI1.B[[i]]),
                            color = colorRampPalette(c("white", "darkgreen"))(n = 1000),
@@ -149,28 +149,28 @@ for (i in 1:12){
                            fontsize = 20, height = 3.75, width = 35, cellwidth = 13.5,
                            main = "")
 
-  }else if(i == 12){
-    
-    p.out[[i]] <- pheatmap(t(PYL1.ABI1.B[[i]]),
-                           color = colorRampPalette(c("white", "darkgreen"))(n = 1000),
-                           breaks = seq(f = 0, to = 120, length.out = 1000),
-                           show_rownames = T,
-                           show_colnames = T,
-                           cluster_rows = F,
-                           cluster_cols = F,
-                           legend = T,
-                           legend_breaks = seq(0, 100, by = 20), 
-                           legend_labels = seq(0, 100, by = 20),
-                           na_col = "grey",
-                           display_numbers = WT.mat,
-                           annotation_legend = T,
-                           border_color = NA, fontsize_row = 11, fontsize_col = 17,
-                           angle_col = 0, treeheight_row = 100, treeheight_col = 100,
-                           fontsize = 20, height = 3.75, width = 35, cellwidth = 13.5,
-                           main = "")
-    
-  }
-  
+  # }else if(i == 12){
+  #   
+  #   p.out[[i]] <- pheatmap(t(PYL1.ABI1.B[[i]]),
+  #                          color = colorRampPalette(c("white", "darkgreen"))(n = 1000),
+  #                          breaks = seq(f = 0, to = 120, length.out = 1000),
+  #                          show_rownames = T,
+  #                          show_colnames = T,
+  #                          cluster_rows = F,
+  #                          cluster_cols = F,
+  #                          legend = T,
+  #                          legend_breaks = seq(0, 100, by = 20), 
+  #                          legend_labels = seq(0, 100, by = 20),
+  #                          na_col = "grey",
+  #                          display_numbers = WT.mat,
+  #                          annotation_legend = T,
+  #                          border_color = NA, fontsize_row = 11, fontsize_col = 17,
+  #                          angle_col = 0, treeheight_row = 100, treeheight_col = 100,
+  #                          fontsize = 20, height = 3.75, width = 35, cellwidth = 13.5,
+  #                          main = "")
+  #   
+  # }
+  # 
 }
 
 pdf("../../results/Figure2/Figure2A_combined_heatmaps.pdf", width = 35, height = 38.5)
@@ -182,17 +182,86 @@ grid.arrange(p.out[[1]]$gtable, p.out[[2]]$gtable, p.out[[3]]$gtable,
 dev.off()
 
 
-## 4. Version ##
+## 4. Mean binding per residue on structures ##
+###############################################
+
+# ## Re-build matrices
+# PYL1.ABI1.B <- vector(mode = "list", length = 12)
+# names(PYL1.ABI1.B) <- names(PYL1.ABI1)
+# PYL1.ABI1.B <- lapply(PYL1.ABI1.B, function(x){x <- matrix(NA, nrow = 177, ncol = 21);
+# rownames(x) <- 1:177; colnames(x) <- c("G", "A", "V", "L", "M", "I", "F",
+#                                        "Y", "W", "K", "R", "H", "D", "E",
+#                                        "S", "T", "C", "N", "Q", "P","*");
+# return(x)})
+# 
+# ## fill-in fitness matrix
+# for(j in 1:length(PYL1.ABI1)){
+# 
+#   for(i in 1:nrow(PYL1.ABI1[[j]])){
+# 
+#     if(PYL1.ABI1[[j]][i,"Pos"] == "WT"){
+# 
+#       next
+# 
+#     }else{
+# 
+#       PYL1.ABI1.B[[j]][as.character(c(as.numeric(PYL1.ABI1[[j]][i,"Pos"]) - 32)),PYL1.ABI1[[j]][i,"Mut"]] <- as.numeric(PYL1.ABI1[[j]][i,"gr_normalised_WTscaled"])
+# 
+#     }
+# 
+#   }
+# 
+# }
+# 
+# ## rename position IDs by the actual positions in PYL1
+# PYL1.ABI1.B <- lapply(PYL1.ABI1.B, function(x){rownames(x) <- paste0(WT.seq, 33:209); class(x) <- "numeric"; return(x)})
+# PYL1.ABI1.B.mean <- sapply(PYL1.ABI1.B, function(x){y <- apply(x[,-21], 1, mean, na.rm = T); return(y)})
+# 
+# ## import PDB
+# PYL1_ABI1.pdb <- read.pdb(file = "../../data/PDB/original/Yin_2009_ABA-PYL1-ABI1/pdb3kdj.ent")
+# PYL1_ABI1_mean_fitness_structures <- vector(mode = "list", length = 12)
+# names(PYL1_ABI1_mean_fitness_structures) <- names(PYL1.ABI1.B)
+# for(i in 1:12){
+#   PYL1_ABI1_mean_fitness_structures[[i]] <- PYL1_ABI1.pdb
+# }
+# 
+# ## overwrite PDB files & export
+# for(i in 1:12){
+# 
+#   ### overwrite B-factor values of PYL1
+#   for (j in 1:nrow(PYL1.ABI1.B.mean)){
+# 
+#     PYL1_ABI1_mean_fitness_structures[[i]]$atom[which(PYL1_ABI1_mean_fitness_structures[[i]]$atom[,"resno"] == j + 32),"b"] <- PYL1.ABI1.B.mean[j,i]
+# 
+#   }
+#   PYL1_ABI1_mean_fitness_structures[[i]]$atom[which(PYL1_ABI1_mean_fitness_structures[[i]]$atom$chain == "A" & c(PYL1_ABI1_mean_fitness_structures[[i]]$atom[,"resno"] == 31 | PYL1_ABI1_mean_fitness_structures[[i]]$atom[,"resno"] == 32)),"b"] <- 0
+# 
+#   ### overwrite the B-factor values of the corresponding ABI1 (chain B)
+#   PYL1_ABI1_mean_fitness_structures[[i]]$atom[which(PYL1_ABI1_mean_fitness_structures[[i]]$atom$chain == "B"),"b"] <- 0
+# 
+#   ### export
+#   write.pdb(PYL1_ABI1_mean_fitness_structures[[i]],
+#             file = paste0("../../data/PDB/modified/Figure2A_",
+#                           round(as.numeric(names(PYL1_ABI1_mean_fitness_structures)),3)[i], "uM.ent"))
+# 
+# }
+
+### in ChimeraX:
+### render structure colouring via b-factor
+### from 0 (white) to  (darkgreen, 006400)
+
+
+## 5. Version ##
 ################
 
 # sessionInfo()
-# R version 4.4.1 (2024-06-14)
+# R version 4.5.1 (2025-06-13)
 # Platform: aarch64-apple-darwin20
-# Running under: macOS Sonoma 14.6.1
+# Running under: macOS Sequoia 15.6.1
 # 
 # Matrix products: default
 # BLAS:   /System/Library/Frameworks/Accelerate.framework/Versions/A/Frameworks/vecLib.framework/Versions/A/libBLAS.dylib 
-# LAPACK: /Library/Frameworks/R.framework/Versions/4.4-arm64/Resources/lib/libRlapack.dylib;  LAPACK version 3.12.0
+# LAPACK: /Library/Frameworks/R.framework/Versions/4.5-arm64/Resources/lib/libRlapack.dylib;  LAPACK version 3.12.1
 # 
 # locale:
 # [1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
@@ -204,10 +273,9 @@ dev.off()
 # [1] grid      stats     graphics  grDevices utils     datasets  methods   base     
 # 
 # other attached packages:
-# [1] cowplot_1.1.3   gridExtra_2.3   pheatmap_1.0.12 scales_1.3.0    stringr_1.5.1  
+# [1] bio3d_2.4-5     cowplot_1.2.0   gridExtra_2.3   pheatmap_1.0.13 scales_1.4.0    stringr_1.5.2  
 # 
 # loaded via a namespace (and not attached):
-# [1] RColorBrewer_1.1-3 R6_2.6.1           tidyselect_1.2.1   magrittr_2.0.3     gtable_0.3.6       glue_1.8.0        
-# [7] tibble_3.2.1       pkgconfig_2.0.3    generics_0.1.3     dplyr_1.1.4        ggplot2_3.5.1      lifecycle_1.0.4   
-# [13] cli_3.6.4          vctrs_0.6.5        compiler_4.4.1     rstudioapi_0.17.1  tools_4.4.1        pillar_1.10.1     
-# [19] munsell_0.5.1      colorspace_2.1-1   rlang_1.1.5        stringi_1.8.4   
+# [1] vctrs_0.6.5        cli_3.6.5          rlang_1.1.6        stringi_1.8.7      generics_0.1.4     S7_0.2.0           glue_1.8.0         tibble_3.3.0       lifecycle_1.0.4    compiler_4.5.1    
+# [11] dplyr_1.1.4        RColorBrewer_1.1-3 Rcpp_1.1.0         pkgconfig_2.0.3    farver_2.1.2       R6_2.6.1           tidyselect_1.2.1   pillar_1.11.1      parallel_4.5.1     magrittr_2.0.4    
+# [21] tools_4.5.1        gtable_0.3.6       ggplot2_4.0.0 

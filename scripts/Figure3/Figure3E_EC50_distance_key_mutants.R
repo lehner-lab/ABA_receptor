@@ -1,7 +1,7 @@
 # The genetic architecture of an allosteric hormone receptor
 # Maximilian R. Stammnitz & Ben Lehner
 # bioRxiv link: https://www.biorxiv.org/content/10.1101/2025.05.30.656975v1
-# 31.05.2025
+# 19.11.2025
 # © M.R.S. (maximilian.stammnitz@crg.eu)
 
 ##############################################
@@ -27,10 +27,11 @@ lapply(packages, library, character.only = TRUE)
 #######################################
 
 ## input
-load("../../data/DRCs/PYL1-ABI1_parameters_Hill.RData")
+load("../../data/DRCs/PYL1-ABI1_parameters_Hill_12conc.RData")
 
 ## remove stops
-Hill.parameters.filtered <- parameters.Hill[-grep("[*]", rownames(parameters.Hill)),]
+Hill.parameters.filtered <- parameters.Hill[which(parameters.Hill[,"R^2"] > 0.9),]
+Hill.parameters.filtered <- Hill.parameters.filtered[-grep("[*]", rownames(Hill.parameters.filtered)),]
 
 ## calculate log10-fold change between WT and variant
 ec50_logFC <- log10(Hill.parameters.filtered[-1,"EC50"] / Hill.parameters.filtered["WT","EC50"])
@@ -72,7 +73,7 @@ known.mutant.pos <- c("H87", "F88", "V108", "V110",
                       "L196", "K200")
 
 ## annotate new hypersensitive mutants from the data
-## 22 positions
+## 19 positions
 new.mutant.pos <- subset(mutants, `p.adj` < 0.1 & `logFC` < 0)
 new.mutant.pos <- unique(substr(rownames(new.mutant.pos), 1, nchar(rownames(new.mutant.pos)) - 1))
 new.mutant.pos <- new.mutant.pos[!new.mutant.pos %in% known.mutant.pos]
@@ -116,8 +117,8 @@ for(i in 1:length(beeswarm.out)){
   names(beeswarm.out[[i]]) <- names(data.all[data.all[,"Category"] == names(beeswarm.out)[i],"Min. distance"])
 }
 names(beeswarm.out) <- c(expression("Known\nEC"["50"]*" regulator\n(N = 18)"),
-                         expression("Novel\nEC"["50"]*" regulator\n(N = 22)"),
-                         expression("\nOther sites\n(N = 137)"))
+                         expression("Novel\nEC"["50"]*" regulator\n(N = 19)"),
+                         expression("\nOther sites\n(N = 140)"))
 
 
 ## 3. Plot ##
@@ -159,13 +160,13 @@ text(y = c(3, 2, 0.9),
      x = -4,
      labels = c(expression("EC"[50]*" regulators"),
                 expression("EC"[50]*" regulators"),
-                expression("(N = 137)")),
+                expression("(N = 140)")),
      xpd = NA, cex = 3.3)
 
 text(y = c(2.8, 1.8),
      x = -4,
      labels = c("(N = 18)",
-                "(N = 22)"),
+                "(N = 19)"),
      xpd = NA, cex = 3.3)
 
 ## vertical line
@@ -192,13 +193,13 @@ dev.off()
 ################
 
 # sessionInfo()
-# R version 4.4.1 (2024-06-14)
+# R version 4.5.1 (2025-06-13)
 # Platform: aarch64-apple-darwin20
-# Running under: macOS Sonoma 14.6.1
+# Running under: macOS Sequoia 15.6.1
 # 
 # Matrix products: default
 # BLAS:   /System/Library/Frameworks/Accelerate.framework/Versions/A/Frameworks/vecLib.framework/Versions/A/libBLAS.dylib 
-# LAPACK: /Library/Frameworks/R.framework/Versions/4.4-arm64/Resources/lib/libRlapack.dylib;  LAPACK version 3.12.0
+# LAPACK: /Library/Frameworks/R.framework/Versions/4.5-arm64/Resources/lib/libRlapack.dylib;  LAPACK version 3.12.1
 # 
 # locale:
 # [1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
@@ -210,9 +211,8 @@ dev.off()
 # [1] stats     graphics  grDevices utils     datasets  methods   base     
 # 
 # other attached packages:
-# [1] beeswarm_0.4.0 scales_1.3.0   stringr_1.5.1 
+# [1] beeswarm_0.4.0 scales_1.4.0   stringr_1.5.2 
 # 
 # loaded via a namespace (and not attached):
-# [1] colorspace_2.1-1  compiler_4.4.1    R6_2.6.1          magrittr_2.0.3    cli_3.6.4         tools_4.4.1      
-# [7] glue_1.8.0        rstudioapi_0.17.1 vctrs_0.6.5       stringi_1.8.4     lifecycle_1.0.4   munsell_0.5.1    
-# [13] rlang_1.1.5  
+# [1] compiler_4.5.1     R6_2.6.1           magrittr_2.0.4     cli_3.6.5          tools_4.5.1        RColorBrewer_1.1-3 glue_1.8.0         farver_2.1.2       vctrs_0.6.5        stringi_1.8.7     
+# [11] lifecycle_1.0.4    rlang_1.1.6  

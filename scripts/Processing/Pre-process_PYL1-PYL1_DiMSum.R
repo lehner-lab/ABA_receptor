@@ -1,7 +1,7 @@
 # The genetic architecture of an allosteric hormone receptor
 # Maximilian R. Stammnitz & Ben Lehner
 # bioRxiv link: https://www.biorxiv.org/content/10.1101/2025.05.30.656975v1
-# 31.05.2025
+# 19.11.2025
 # © M.R.S. (maximilian.stammnitz@crg.eu)
 
 #############################################
@@ -112,10 +112,9 @@ colnames(scaling.0uM.ABA) <- c("block1", "block2", "block3", "block4")
 ### Linear transformation
 coefficients.0uM.ABA <- matrix(NA, ncol = 4, nrow = 2)
 colnames(coefficients.0uM.ABA) <-  colnames(scaling.0uM.ABA)
-coefficients.0uM.ABA[,1] <- c(1, 0)
-for (i in 2:4){
+for (i in 1:4){
 
-  tmp.lm <- lm(formula = scaling.0uM.ABA[,1] ~ scaling.0uM.ABA[,i])
+  tmp.lm <- lm(formula = c(0, 100) ~ scaling.0uM.ABA[,i])
   tmp.lm <- summary(tmp.lm)
   coefficients.0uM.ABA[1,i] <- tmp.lm$coefficients[[2]]
   coefficients.0uM.ABA[2,i] <- tmp.lm$coefficients[[1]]  
@@ -165,10 +164,9 @@ colnames(scaling.250uM.ABA) <- c("block1", "block2", "block3", "block4")
 ### Scale all of the concentrations
 coefficients.250uM.ABA <- matrix(NA, ncol = 4, nrow = 2)
 colnames(coefficients.250uM.ABA) <-  colnames(scaling.250uM.ABA)
-coefficients.250uM.ABA[,1] <- c(1, 0)
-for (i in 2:4){
+for (i in 1:4){
   
-  tmp.lm <- lm(formula = scaling.250uM.ABA[,1] ~ scaling.250uM.ABA[,i])
+  tmp.lm <- lm(formula = c(0, 100) ~ scaling.250uM.ABA[,i])
   tmp.lm <- summary(tmp.lm)
   coefficients.250uM.ABA[1,i] <- tmp.lm$coefficients[[2]]
   coefficients.250uM.ABA[2,i] <- tmp.lm$coefficients[[1]]  
@@ -311,27 +309,27 @@ PYL1.PYL1.250uM.ABA[which(PYL1.PYL1.250uM.ABA[,"Nham_aa"] == 0),"Mut"] <- "WT"
 ##############################################################
 
 ## Scale abundance fitness to WT
-PYL1.PYL1.0uM.ABA$gr_normalised_WTscaled <- 100*PYL1.PYL1.0uM.ABA$gr_normalised/PYL1.PYL1.0uM.ABA$gr_normalised[which(PYL1.PYL1.0uM.ABA[,"WT"] == T)[1]]
-PYL1.PYL1.0uM.ABA$gr_sigma_normalised_WTscaled <- 100*PYL1.PYL1.0uM.ABA$gr_sigma_normalised/PYL1.PYL1.0uM.ABA$gr_normalised[which(PYL1.PYL1.0uM.ABA[,"WT"] == T)[1]]
-PYL1.PYL1.250uM.ABA$gr_normalised_WTscaled <- 100*PYL1.PYL1.250uM.ABA$gr_normalised/PYL1.PYL1.250uM.ABA$gr_normalised[which(PYL1.PYL1.250uM.ABA[,"WT"] == T)[1]]
-PYL1.PYL1.250uM.ABA$gr_sigma_normalised_WTscaled <- 100*PYL1.PYL1.250uM.ABA$gr_sigma_normalised/PYL1.PYL1.250uM.ABA$gr_normalised[which(PYL1.PYL1.250uM.ABA[,"WT"] == T)[1]]
+PYL1.PYL1.0uM.ABA$gr_normalised_WTscaled <- PYL1.PYL1.0uM.ABA$gr_normalised
+PYL1.PYL1.0uM.ABA$gr_sigma_normalised_WTscaled <- PYL1.PYL1.0uM.ABA$gr_sigma_normalised
+PYL1.PYL1.250uM.ABA$gr_normalised_WTscaled <- PYL1.PYL1.250uM.ABA$gr_normalised
+PYL1.PYL1.250uM.ABA$gr_sigma_normalised_WTscaled <- PYL1.PYL1.250uM.ABA$gr_sigma_normalised
 
 ## Save PYL1.PYL1 dataframes as .Rdata files
-save(PYL1.PYL1.0uM.ABA, file = "../data/DiMSum/PYL1-PYL1/0uM_ABA/PYL1-PYL1_0uM_ABA_preprocessed.RData")
-save(PYL1.PYL1.250uM.ABA, file = "../data/DiMSum/PYL1-PYL1/250uM_ABA//PYL1-PYL1_250uM_ABA_preprocessed.RData")
+save(PYL1.PYL1.0uM.ABA, file = "../../data/DiMSum/PYL1-PYL1/0uM_ABA/PYL1-PYL1_0uM_ABA_preprocessed.RData")
+save(PYL1.PYL1.250uM.ABA, file = "../../data/DiMSum/PYL1-PYL1/250uM_ABA/PYL1-PYL1_250uM_ABA_preprocessed.RData")
 
 
 ## 5. Version ##
 ################
 
 # sessionInfo()
-# R version 4.4.1 (2024-06-14)
+# R version 4.5.1 (2025-06-13)
 # Platform: aarch64-apple-darwin20
-# Running under: macOS Sonoma 14.6.1
+# Running under: macOS Sequoia 15.6.1
 # 
 # Matrix products: default
 # BLAS:   /System/Library/Frameworks/Accelerate.framework/Versions/A/Frameworks/vecLib.framework/Versions/A/libBLAS.dylib 
-# LAPACK: /Library/Frameworks/R.framework/Versions/4.4-arm64/Resources/lib/libRlapack.dylib;  LAPACK version 3.12.0
+# LAPACK: /Library/Frameworks/R.framework/Versions/4.5-arm64/Resources/lib/libRlapack.dylib;  LAPACK version 3.12.1
 # 
 # locale:
 # [1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
@@ -343,8 +341,7 @@ save(PYL1.PYL1.250uM.ABA, file = "../data/DiMSum/PYL1-PYL1/250uM_ABA//PYL1-PYL1_
 # [1] stats     graphics  grDevices utils     datasets  methods   base     
 # 
 # other attached packages:
-# [1] stringr_1.5.1
+# [1] stringr_1.5.2
 # 
 # loaded via a namespace (and not attached):
-# [1] compiler_4.4.1    magrittr_2.0.3    cli_3.6.4         tools_4.4.1       glue_1.8.0        rstudioapi_0.17.1 vctrs_0.6.5      
-# [8] stringi_1.8.4     lifecycle_1.0.4   rlang_1.1.5      
+# [1] compiler_4.5.1  magrittr_2.0.4  cli_3.6.5       tools_4.5.1     glue_1.8.0      vctrs_0.6.5     stringi_1.8.7   lifecycle_1.0.4 rlang_1.1.6   

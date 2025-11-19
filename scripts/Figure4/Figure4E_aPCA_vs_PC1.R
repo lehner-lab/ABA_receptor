@@ -1,7 +1,7 @@
 # The genetic architecture of an allosteric hormone receptor
 # Maximilian R. Stammnitz & Ben Lehner
 # bioRxiv link: https://www.biorxiv.org/content/10.1101/2025.05.30.656975v1
-# 31.05.2025
+# 19.11.2025
 # © M.R.S. (maximilian.stammnitz@crg.eu)
 
 ####################################
@@ -13,7 +13,7 @@
 ####################
 
 ## Libraries
-packages <- c("stringr", "scales", "ggplot2", "ggtext")
+packages <- c("stringr", "scales", "ggplot2", "ggtext", "rlang")
 
 ## Install missing packages
 install_if_missing <- function(pkg) {if (!requireNamespace(pkg, quietly = TRUE)) install.packages(pkg)}
@@ -27,7 +27,7 @@ lapply(packages, library, character.only = TRUE)
 ########################################################
 
 ## Input 12-dose measurements
-load("../../data/DiMSum/PYL1-ABI1/PYL1-ABI1_preprocessed.RData")
+load("../../data/DiMSum/PYL1-ABI1_12conc/PYL1-ABI1_preprocessed_12conc.RData")
 
 ## remove synonymous variants
 PYL1.ABI1 <- lapply(PYL1.ABI1, function(x){y <- x[-which(x[,"Nham_aa"] == 0 & is.na(x[,"WT"]) == T),]; return(y)})
@@ -138,28 +138,29 @@ rho_PC1 <- cor(x = PCA.out$PC1,  y = PCA.out$aPCA,
 pdf('../../results/Figure4/Figure4E_aPCA_vs_PC1.pdf', height = 10, width = 11)
 
 out.4E <- ggplot(PCA.out, aes(x = PC1, y = aPCA)) +
-  geom_point(aes(x = PC1, y = aPCA), size = 1, shape = 16, color = "black", alpha = 1) +
+  geom_point(aes(x = PC1, y = aPCA), size = 1.5, shape = 16, color = "black", alpha = 1, stroke = 0) +
   annotate("text",
-           x = -9,
-           y = 7.5,
-           label = bquote(rho == .(format(rho_PC1, digits = 2))),  ##
+           x = -9.4,
+           y = -6.02,
+           label = expr_text(bquote(rho == .(format(rho_PC1, digits = 2)))),
+           parse = T,
            hjust = 0, size = 20, color = "black") +
   scale_x_continuous(breaks = seq(from = -9, to = 9, length.out = 5)) +
-  scale_y_continuous(breaks = seq(from = 0, to = 100, length.out = 6), limit = c(-3, 125)) +
+  scale_y_continuous(breaks = seq(from = 0, to = 100, length.out = 6), limit = c(-20, 125)) +
   theme_classic(base_size = 50) +
   theme(plot.title = element_markdown(),
         plot.subtitle = element_markdown(size = 20),
         title = element_text(size = 40),
-        axis.text = element_text(size = 40),
+        axis.text = element_text(size = 30),
         axis.line.x = element_line(size = 1, color = 'black'),
         axis.line.y = element_line(size = 1, color = 'black'),
-        axis.title.x = element_text(family = 'Helvetica', colour = 'black', size = 50, vjust = -1),
-        axis.title.y = element_text(family = 'Helvetica', colour = 'black', size = 60, vjust = 2),
+        axis.title.x = element_text(family = 'Helvetica', colour = 'black', size = 40, vjust = -1),
+        axis.title.y = element_text(family = 'Helvetica', colour = 'black', size = 50, vjust = 2),
         legend.position = "none",
         text = element_text(family="Helvetica"),
         plot.margin = unit(c(2, 2, 2, 2),"cm")) +
   labs(x = paste0("PC1 (", y.PCA.components.vars[1], " % var.)"),
-       y = "Abundance")
+       y = "Relative PYL1 Abundance")
 
 print(out.4E)
 
@@ -170,13 +171,13 @@ dev.off()
 ################
 
 # sessionInfo()
-# R version 4.4.1 (2024-06-14)
+# R version 4.5.1 (2025-06-13)
 # Platform: aarch64-apple-darwin20
-# Running under: macOS Sonoma 14.6.1
+# Running under: macOS Sequoia 15.6.1
 # 
 # Matrix products: default
 # BLAS:   /System/Library/Frameworks/Accelerate.framework/Versions/A/Frameworks/vecLib.framework/Versions/A/libBLAS.dylib 
-# LAPACK: /Library/Frameworks/R.framework/Versions/4.4-arm64/Resources/lib/libRlapack.dylib;  LAPACK version 3.12.0
+# LAPACK: /Library/Frameworks/R.framework/Versions/4.5-arm64/Resources/lib/libRlapack.dylib;  LAPACK version 3.12.1
 # 
 # locale:
 # [1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
@@ -188,11 +189,9 @@ dev.off()
 # [1] stats     graphics  grDevices utils     datasets  methods   base     
 # 
 # other attached packages:
-# [1] ggtext_0.1.2  ggplot2_3.5.1 scales_1.3.0  stringr_1.5.1
+# [1] rlang_1.1.6   ggtext_0.1.2  ggplot2_4.0.0 scales_1.4.0  stringr_1.5.2
 # 
 # loaded via a namespace (and not attached):
-# [1] crayon_1.5.3      vctrs_0.6.5       cli_3.6.4         rlang_1.1.5       stringi_1.8.4     generics_0.1.3   
-# [7] glue_1.8.0        colorspace_2.1-1  gridtext_0.1.5    grid_4.4.1        munsell_0.5.1     tibble_3.2.1     
-# [13] lifecycle_1.0.4   compiler_4.4.1    dplyr_1.1.4       Rcpp_1.0.14       pkgconfig_2.0.3   rstudioapi_0.17.1
-# [19] farver_2.1.2      R6_2.6.1          tidyselect_1.2.1  pillar_1.10.1     magrittr_2.0.3    tools_4.4.1      
-# [25] withr_3.0.2       gtable_0.3.6      xml2_1.3.6     
+# [1] crayon_1.5.3       vctrs_0.6.5        cli_3.6.5          stringi_1.8.7      generics_0.1.4     S7_0.2.0           glue_1.8.0         gridtext_0.1.5     grid_4.5.1         tibble_3.3.0      
+# [11] lifecycle_1.0.4    compiler_4.5.1     dplyr_1.1.4        RColorBrewer_1.1-3 Rcpp_1.1.0         pkgconfig_2.0.3    farver_2.1.2       R6_2.6.1           tidyselect_1.2.1   pillar_1.11.1     
+# [21] magrittr_2.0.4     tools_4.5.1        withr_3.0.2        gtable_0.3.6       xml2_1.4.0  
